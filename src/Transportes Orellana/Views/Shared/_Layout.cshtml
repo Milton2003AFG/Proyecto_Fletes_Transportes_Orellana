@@ -1,47 +1,258 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Transportes_Orellana</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - Transportes Orellana</title>
+    
+    <!-- Bootstrap CSS predeterminado de .NET Core -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- Bootstrap Icons (CDN) para los íconos del menú y botones -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Transportes_Orellana.styles.css" asp-append-version="true" />
+
+    <style>
+        :root {
+            --sidebar-bg: #0b1a30;
+            --sidebar-hover: #152642;
+            --primary-blue: #0d6efd;
+            --bg-light: #f4f7fb;
+            --text-muted-custom: #8a99ad;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Layout wrapper */
+        .app-wrapper {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        /* Sidebar */
+        .app-sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-brand {
+            padding: 1.5rem 1.25rem 1.25rem;
+            text-decoration: none;
+            color: #ffffff;
+            display: block;
+        }
+
+        .sidebar-brand-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0 0.75rem;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu .nav-item {
+            margin-bottom: 0.3rem;
+        }
+
+        .sidebar-menu .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.65rem 0.95rem;
+            color: #d1d9e6;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-menu .nav-link i {
+            font-size: 1.15rem;
+            margin-right: 0.85rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-menu .nav-link:hover {
+            background-color: var(--sidebar-hover);
+            color: #ffffff;
+        }
+
+        /* Estado Activo del Menú */
+        .sidebar-menu .nav-link.active {
+            background-color: var(--primary-blue);
+            color: #ffffff;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+        }
+
+        /* Área de contenido */
+        .app-main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Header superior */
+        .app-header {
+            background-color: #ffffff;
+            height: 65px;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e5eaef;
+        }
+
+        .header-date {
+            display: flex;
+            align-items: center;
+            color: #6c757d;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .header-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #2b3674;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        /* Contenedor de las vistas */
+        .app-content {
+            padding: 2rem;
+            flex-grow: 1;
+        }
+
+        /* Tarjetas */
+        .card {
+            border: 1px solid #eef2f6;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Transportes_Orellana</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+    <div class="app-wrapper">
+        <!-- Sidebar lateral -->
+        <aside class="app-sidebar">
+            <a href="/" class="sidebar-brand">
+                <div class="sidebar-brand-title">Transportes<br>Orellana</div>
+            </a>
+
+            <ul class="sidebar-menu">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">
+                        <i class="bi bi-grid"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Solicitudes" asp-action="Index">
+                        <i class="bi bi-file-earmark-text"></i> Solicitudes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Viajes" asp-action="Index">
+                        <i class="bi bi-truck"></i> Viajes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Clientes" asp-action="Index">
+                        <i class="bi bi-people"></i> Clientes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Cotizaciones" asp-action="Index">
+                        <i class="bi bi-receipt"></i> Cotizaciones
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Camiones" asp-action="Index">
+                        <i class="bi bi-truck-front"></i> Camiones
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Motoristas" asp-action="Index">
+                        <i class="bi bi-person-badge"></i> Motoristas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Gastos" asp-action="Index">
+                        <i class="bi bi-wallet2"></i> Gastos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Pagos" asp-action="Index">
+                        <i class="bi bi-credit-card"></i> Pagos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Reportes" asp-action="Index">
+                        <i class="bi bi-bar-chart"></i> Reportes
+                    </a>
+                </li>
+                <li class="nav-item mt-3">
+                    <a class="nav-link text-muted-custom" asp-controller="Configuracion" asp-action="Index">
+                        <i class="bi bi-gear"></i> Configuración
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Contenedor Principal -->
+        <div class="app-main">
+            <!-- Header superior -->
+            <header class="app-header">
+                <button class="btn btn-sm btn-light border-0 d-md-none" id="sidebarToggle">
+                    <i class="bi bi-list fs-5"></i>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+
+                <div class="d-flex align-items-center ms-auto gap-4">
+                    <!-- Fecha dinámica actual -->
+                    <div class="header-date">
+                        <i class="bi bi-calendar3 me-2"></i>
+                        <span>@DateTime.Now.ToString("dd/MM/yyyy")</span>
+                    </div>
+
+                    <!-- Usuario -->
+                    <div class="header-profile">
+                        <i class="bi bi-person-circle fs-5 text-primary"></i>
+                        <span>Carlos Méndez</span>
+                        <i class="bi bi-chevron-down small text-muted"></i>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+            </header>
+
+            <!-- Renderizado de Vistas Hijas -->
+            <main class="app-content">
+                @RenderBody()
+            </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Transportes_Orellana - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+    <!-- Scripts base de Bootstrap -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
