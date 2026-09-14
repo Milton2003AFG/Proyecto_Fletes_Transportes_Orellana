@@ -236,12 +236,39 @@
                         <span>@DateTime.Now.ToString("dd/MM/yyyy")</span>
                     </div>
 
-                    <!-- Usuario -->
-                    <div class="header-profile">
-                        <i class="bi bi-person-circle fs-5 text-primary"></i>
-                        <span>Carlos Méndez</span>
-                        <i class="bi bi-chevron-down small text-muted"></i>
-                    </div>
+                    <!-- Menú de Usuario / Sesión -->
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <div class="dropdown">
+                            <button class="btn border-0 d-flex align-items-center gap-2 text-dark fw-semibold p-0" 
+                                    type="button" 
+                                    data-bs-toggle="dropdown" 
+                                    aria-expanded="false">
+                                <i class="bi bi-person-circle fs-5 text-primary"></i>
+                                <span class="small">@User.Identity.Name</span>
+                                <i class="bi bi-chevron-down small text-muted"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2">
+                                <li class="px-3 py-2 text-muted small border-bottom">
+                                    Rol: <strong>@(User.IsInRole("Admin") ? "Administrador" : "Motorista")</strong>
+                                </li>
+                                <li>
+                                    <form asp-controller="Account" asp-action="Logout" method="post" class="p-1">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="dropdown-item text-danger d-flex align-items-center gap-2 rounded">
+                                            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-sm btn-primary">
+                            Iniciar sesión
+                        </a>
+                    }
                 </div>
             </header>
 
