@@ -25,6 +25,7 @@ CREATE TABLE cliente(
 
 CREATE TABLE motorista(
     motorista_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    usuario_id VARCHAR(450) NULL REFERENCES AspNetUsers(Id),
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
     direccion VARCHAR(500) NOT NULL,

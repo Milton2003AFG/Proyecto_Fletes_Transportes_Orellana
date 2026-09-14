@@ -1,8 +1,17 @@
-﻿using Transportes_Orellana.Models;
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Transportes_Orellana.Models;
 
 public class Motorista
 {
     public int Id { get; set; }
+
+    // Llave foránea hacia AspNetUsers
+    public string? UsuarioId { get; set; }
+
+    // Propiedad de navegación opcional hacia el usuario de Identity
+    public IdentityUser? Usuario { get; set; }
+
     public string Nombre { get; set; } = string.Empty;
     public string Apellido { get; set; } = string.Empty;
     public string Direccion { get; set; } = string.Empty;

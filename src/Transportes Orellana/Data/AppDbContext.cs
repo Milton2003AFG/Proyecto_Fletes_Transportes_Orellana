@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Transportes_Orellana.Models;
 
 namespace Transportes_Orellana.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -53,6 +54,16 @@ public class AppDbContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
                   .HasColumnName("motorista_id");
+            
+            // Mapeo de la columna y relación con AspNetUsers
+            entity.Property(e => e.UsuarioId)
+                  .HasColumnName("usuario_id")
+                  .HasMaxLength(450);
+            entity.HasOne(e => e.Usuario)
+                  .WithMany()
+                  .HasForeignKey(e => e.UsuarioId)
+                  .IsRequired(false);
+
             entity.Property(e => e.Nombre)
                   .HasColumnName("nombre")
                   .HasMaxLength(100);
