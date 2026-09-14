@@ -1,0 +1,115 @@
+﻿@model IEnumerable<Transportes_Orellana.Models.Cliente>
+
+@{
+    ViewData["Title"] = "Clientes";
+}
+
+@if (TempData["Exito"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
+        <i class="bi bi-check-circle me-2"></i> @TempData["Exito"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+
+        <!-- 1. Encabezado -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold text-dark mb-0">Clientes</h3>
+            <a asp-action="Create" class="btn btn-primary px-3 shadow-sm" style="border-radius: 8px;">
+                <i class="bi bi-plus-lg me-1"></i> Nuevo cliente
+            </a>
+        </div>
+
+        <!-- 2. Buscador -->
+        <div class="mb-4" style="max-width: 380px;">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0 text-muted ps-3">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" id="buscarCliente" class="form-control border-start-0 ps-2" placeholder="Buscar cliente...">
+            </div>
+        </div>
+
+        <!-- 3. Tabla -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" id="tablaClientes">
+                <thead class="text-secondary small fw-bold">
+                    <tr>
+                        <th class="border-0 ps-0">Nombre</th>
+                        <th class="border-0">Correo</th>
+                        <th class="border-0">Teléfono</th>
+                        <th class="border-0">Dirección</th>
+                        <th class="border-0">Estado</th>
+                        <th class="border-0">Fecha de Registro</th>
+                        <th class="border-0 text-center pe-0">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="border-top-0">
+                    @foreach (var cliente in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold text-dark ps-0">@cliente.Nombre @cliente.Apellido</td>
+                            <td class="text-muted">@cliente.Correo</td>
+                            <td class="text-muted">@cliente.Telefono</td>
+                            <td class="text-muted">@cliente.Direccion</td>                           
+                            <td>
+                                @if (cliente.Estado?.ToLower() == "activo")
+                                {
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-pill">Activo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1 rounded-pill">Inactivo</span>
+                                }
+                            </td>
+                            <td class="text-muted">@cliente.FechaRegistro</td>
+                            <td class="text-center pe-0">
+                                <a asp-action="Details" asp-route-id="@cliente.Id" class="btn btn-sm text-secondary p-1" title="Ver detalles">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@cliente.Id" class="btn btn-sm text-primary p-1" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                @if (cliente.Estado?.ToLower() == "inactivo")
+                                {
+                                    <a asp-action="Activate" asp-route-id="@cliente.Id" class="btn btn-sm text-success p-1" title="Activar">
+                                        <i class="bi bi-check-circle"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="Delete" asp-route-id="@cliente.Id" class="btn btn-sm text-warning p-1" title="Desactivar">
+                                        <i class="bi bi-x-circle"></i>
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="bi bi-people display-4"></i>
+                <p class="mt-2 fw-medium">No hay clientes registrados aún.</p>
+                <a asp-action="Create" class="btn btn-sm btn-primary">Registrar primer cliente</a>
+            </div>
+        }
+    </div>
+</div>
+   
+@section Scripts {
+    <script>
+        document.getElementById('buscarCliente').addEventListener('keyup', function() {
+            const filtro = this.value.toLowerCase();
+            const filas = document.querySelectorAll('#tablaClientes tbody tr');
+            filas.forEach(fila => {
+                fila.style.display = fila.textContent.toLowerCase().includes(filtro) ? '' : 'none';
+            });
+        });
+    </script>
+}

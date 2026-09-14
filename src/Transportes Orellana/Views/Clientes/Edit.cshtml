@@ -1,0 +1,71 @@
+@model Transportes_Orellana.Models.Cliente
+
+@{
+    ViewData["Title"] = "Editar Cliente";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+        <!-- Encabezado -->
+        <div class="d-flex align-items-center mb-4">
+            <a asp-action="Index" class="btn btn-sm btn-light border me-3 text-secondary" style="border-radius: 8px;" title="Regresar">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <h3 class="fw-bold text-dark mb-0">Editar cliente</h3>
+        </div>
+
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 shadow-sm py-2" role="alert"></div>
+
+            <div class="row g-3">
+                <!-- Nombre -->
+                <div class="col-md-6">
+                    <label asp-for="Nombre" class="form-label text-secondary small fw-semibold">Nombre</label>
+                    <input asp-for="Nombre" class="form-control" placeholder="Ej. Distribuidora Central" />
+                    <span asp-validation-for="Nombre" class="text-danger small"></span>
+                </div>
+
+                <!-- Apellido -->
+                <div class="col-md-6">
+                    <label asp-for="Apellido" class="form-label text-secondary small fw-semibold">Apellido</label>
+                    <input asp-for="Apellido" class="form-control" placeholder="Ej. Distribuidora Central" />
+                    <span asp-validation-for="Apellido" class="text-danger small"></span>
+                </div>
+
+                <!-- Correo -->
+                <div class="col-md-6">
+                    <label asp-for="Correo" class="form-label text-secondary small fw-semibold">Correo electrónico</label>
+                    <input asp-for="Correo" type="email" class="form-control" placeholder="contacto@empresa.com" />
+                    <span asp-validation-for="Correo" class="text-danger small"></span>
+                </div>
+
+                <!-- Teléfono -->
+                <div class="col-md-6">
+                    <label asp-for="Telefono" class="form-label text-secondary small fw-semibold">Teléfono</label>
+                    <input asp-for="Telefono" class="form-control" placeholder="+503 0000-0000" />
+                    <span asp-validation-for="Telefono" class="text-danger small"></span>
+                </div>
+
+
+                <!-- Dirección -->
+                <div class="col-md-6">
+                    <label asp-for="Direccion" class="form-label text-secondary small fw-semibold">Dirección</label>
+                    <input asp-for="Direccion" class="form-control" placeholder="Ej. San Salvador" />
+                    <span asp-validation-for="Direccion" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="mt-4 pt-2 d-flex justify-content-end gap-2">
+                <a asp-action="Index" class="btn btn-light border px-4" style="border-radius: 8px;">Cancelar</a>
+                <button type="submit" class="btn btn-primary px-4 shadow-sm" style="border-radius: 8px;">Guardar cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
