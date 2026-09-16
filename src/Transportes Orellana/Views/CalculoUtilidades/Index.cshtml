@@ -1,0 +1,116 @@
+@model IEnumerable<Transportes_Orellana.Models.ViewModels.CalculoUtilidadViewModel>
+
+@{
+    ViewData["Title"] = "Cálculo de Utilidades";
+
+    var totalFletes = Model.Count();
+    var totalIngresos = Model.Sum(x => x.ValorFlete);
+    var totalGastos = Model.Sum(x => x.TotalGastos);
+    var totalUtilidad = Model.Sum(x => x.UtilidadNeta);
+}
+
+<div class="container-fluid py-4">
+
+    <h2 class="fw-bold">Cálculo de Utilidades</h2>
+    <p class="text-muted">Resumen financiero de los fletes terminados.</p>
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <small class="text-muted">Fletes terminados</small>
+                    <h3>@totalFletes</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <small class="text-muted">Ingresos totales</small>
+                    <h3>@totalIngresos.ToString("C2")</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <small class="text-muted">Gastos totales</small>
+                    <h3 class="text-danger">@totalGastos.ToString("C2")</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <small class="text-muted">Utilidad acumulada</small>
+                    <h3 class="text-success">@totalUtilidad.ToString("C2")</h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+
+            <h5 class="fw-bold mb-3">Utilidades por flete</h5>
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info">
+                    No hay fletes terminados.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Flete</th>
+                                <th>Cliente</th>
+                                <th>Origen</th>
+                                <th>Destino</th>
+                                <th>Valor</th>
+                                <th>Gastos</th>
+                                <th>Utilidad</th>
+                                <th>Rentabilidad</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>#@item.FleteId</td>
+                                    <td>@item.Cliente</td>
+                                    <td>@item.LugarRecolecta</td>
+                                    <td>@item.LugarEntrega</td>
+                                    <td>@item.ValorFlete.ToString("C2")</td>
+                                    <td class="text-danger">@item.TotalGastos.ToString("C2")</td>
+                                    <td class="text-success fw-bold">@item.UtilidadNeta.ToString("C2")</td>
+                                    <td>@item.PorcentajeRentabilidad.ToString("N2")%</td>
+
+                                    <td>
+                                        <a asp-action="Details"
+                                           asp-route-id="@item.FleteId"
+                                           class="btn btn-primary btn-sm">
+                                            Ver
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+        </div>
+    </div>
+
+</div>
