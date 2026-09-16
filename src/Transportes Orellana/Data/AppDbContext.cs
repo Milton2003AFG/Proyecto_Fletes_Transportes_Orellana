@@ -21,7 +21,10 @@ public class AppDbContext : IdentityDbContext
         // CLIENTE
         modelBuilder.Entity<Cliente>(entity =>
         {
-            entity.ToTable("cliente");
+            entity.ToTable("cliente", t =>
+            {
+                  t.HasCheckConstraint("chk_cliente_estado", "estado IN ('activo', 'inactivo')");
+            });
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
                   .HasColumnName("cliente_id");
@@ -42,15 +45,20 @@ public class AppDbContext : IdentityDbContext
                   .HasMaxLength(500);
             entity.Property(e => e.Estado)
                   .HasColumnName("estado")
-                  .HasMaxLength(20);         
+                  .HasMaxLength(20)
+                  .HasDefaultValue("activo");       
             entity.Property(e => e.FechaRegistro)
-                  .HasColumnName("fecha_registro");
+                  .HasColumnName("fecha_registro")
+                  .HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
 
         // MOTORISTA
         modelBuilder.Entity<Motorista>(entity =>
         {
-            entity.ToTable("motorista");
+            entity.ToTable("motorista", t =>
+            {
+                  t.HasCheckConstraint("chk_motorista_estado", "estado IN ('activo', 'inactivo')");
+            });
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
                   .HasColumnName("motorista_id");
@@ -87,15 +95,20 @@ public class AppDbContext : IdentityDbContext
                   .HasMaxLength(2048);
             entity.Property(e => e.Estado)
                   .HasColumnName("estado")
-                  .HasMaxLength(20);        
+                  .HasMaxLength(20)
+                  .HasDefaultValue("activo");    
             entity.Property(e => e.FechaRegistro)
-                  .HasColumnName("fecha_registro");
+                  .HasColumnName("fecha_registro")
+                  .HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
 
         // UNIDAD TRANSPORTE
         modelBuilder.Entity<UnidadTransporte>(entity =>
         {
-            entity.ToTable("unidad_transporte");
+            entity.ToTable("unidad_transporte", t =>
+            {
+                  t.HasCheckConstraint("chk_unidad_estado", "estado IN ('activo', 'inactivo')");
+            });
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
                   .HasColumnName("unidad_id");
@@ -112,15 +125,20 @@ public class AppDbContext : IdentityDbContext
                   .HasColumnName("anio_fabricacion");
             entity.Property(e => e.Estado)
                   .HasColumnName("estado")
-                  .HasMaxLength(20);         
+                  .HasMaxLength(20)
+                  .HasDefaultValue("activo");        
             entity.Property(e => e.FechaRegistro)
-                  .HasColumnName("fecha_registro");
+                  .HasColumnName("fecha_registro")
+                  .HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
 
         // FLETE
         modelBuilder.Entity<Flete>(entity =>
         {
-            entity.ToTable("flete");
+            entity.ToTable("flete", t =>
+            {
+                  t.HasCheckConstraint("chk_flete_estado", "estado IN ('programado', 'en_proceso', 'terminado', 'con_devolucion', 'con_queja')");
+            });
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
                   .HasColumnName("flete_id");
@@ -134,7 +152,8 @@ public class AppDbContext : IdentityDbContext
                   .HasColumnName("descripcion");
             entity.Property(e => e.Estado)
                   .HasColumnName("estado")
-                  .HasMaxLength(20);         
+                  .HasMaxLength(20)
+                  .HasDefaultValue("programado");       
             entity.Property(e => e.MontoCobro)
                   .HasColumnName("monto_cobro")
                   .HasColumnType("numeric(10,2)");
@@ -151,7 +170,8 @@ public class AppDbContext : IdentityDbContext
             entity.Property(e => e.Consideraciones)
                   .HasColumnName("consideraciones");
             entity.Property(e => e.FechaRegistro)
-                  .HasColumnName("fecha_registro");
+                  .HasColumnName("fecha_registro")
+                  .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             // Relaciones
             entity.HasOne(e => e.Cliente)
@@ -168,7 +188,10 @@ public class AppDbContext : IdentityDbContext
         // GASTO FLETE 
         modelBuilder.Entity<GastoFlete>(entity =>
         {
-            entity.ToTable("gasto_flete");
+            entity.ToTable("gasto_flete", t =>
+            {
+                  t.HasCheckConstraint("chk_gasto_tipo", "tipo_gasto IN ('camion', 'varios', 'produccion')");
+            });
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
                   .HasColumnName("gasto_id");
@@ -184,7 +207,8 @@ public class AppDbContext : IdentityDbContext
                   .HasColumnName("monto")
                   .HasColumnType("numeric(10,2)");
             entity.Property(e => e.FechaRegistro)
-                  .HasColumnName("fecha_registro");
+                  .HasColumnName("fecha_registro")
+                  .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             // Relacion
             entity.HasOne(e => e.Flete)

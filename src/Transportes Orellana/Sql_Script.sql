@@ -83,7 +83,7 @@ CREATE TABLE gasto_flete(
     monto NUMERIC(10,2) NOT NULL,
     fecha_registro TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT chk_tipo_gasto 
-        CHECK (tipo_gasto IN ('combustible', 'peaje', 'alimentacion', 'hospedaje', 'mantenimiento', 'otro')),
+        CHECK (tipo_gasto IN ('camion', 'varios', 'produccion')),
     CONSTRAINT fk_flete
         FOREIGN KEY(flete_id) REFERENCES flete(flete_id)
 );
