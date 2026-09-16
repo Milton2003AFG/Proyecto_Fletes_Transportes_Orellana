@@ -204,6 +204,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                   <a <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "CalculoUtilidades" ? "active" : "")" asp-controller="CalculoUtilidades" asp-action="Index">
+                       <i class="bi bi-cash-coin"></i> Utilidades
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" asp-controller="Pagos" asp-action="Index">
                         <i class="bi bi-credit-card"></i> Pagos
                     </a>
