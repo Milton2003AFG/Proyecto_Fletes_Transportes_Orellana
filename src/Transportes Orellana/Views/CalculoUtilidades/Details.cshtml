@@ -8,21 +8,14 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold mb-1">
-                Utilidad del Flete #@Model.FleteId
-            </h2>
-
-            <p class="text-muted mb-0">
-                Detalle financiero del flete terminado.
-            </p>
+            <h2 class="fw-bold mb-1">Utilidad del Flete #@Model.FleteId</h2>
+            <p class="text-muted mb-0">Detalle financiero del flete terminado.</p>
         </div>
 
-        <span class="badge bg-success">
-            @Model.Estado
-        </span>
+        <span class="badge bg-success">@Model.Estado</span>
     </div>
 
-    <div class="card shadow-sm border-0 mb-4">
+    <div class="card mb-4">
         <div class="card-body">
 
             <h5 class="fw-bold mb-3">Datos del flete</h5>
@@ -57,47 +50,114 @@
         </div>
     </div>
 
-    <div class="card shadow-sm border-0">
-        <div class="card-body">
+    <div class="row g-3 mb-4">
 
-            <h5 class="fw-bold mb-3">Resumen financiero</h5>
-
-            <div class="row">
-
-                <div class="col-md-3 mb-3">
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
                     <small class="text-muted">Valor del flete</small>
                     <h4>@Model.ValorFlete.ToString("C2")</h4>
                 </div>
+            </div>
+        </div>
 
-                <div class="col-md-3 mb-3">
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
                     <small class="text-muted">Total gastos</small>
-                    <h4 class="text-danger">
-                        @Model.TotalGastos.ToString("C2")
-                    </h4>
+                    <h4 class="text-danger">@Model.TotalGastos.ToString("C2")</h4>
                 </div>
+            </div>
+        </div>
 
-                <div class="col-md-3 mb-3">
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
                     <small class="text-muted">Utilidad neta</small>
-                    <h4 class="text-success">
-                        @Model.UtilidadNeta.ToString("C2")
-                    </h4>
+                    <h4 class="text-success">@Model.UtilidadNeta.ToString("C2")</h4>
                 </div>
+            </div>
+        </div>
 
-                <div class="col-md-3 mb-3">
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
                     <small class="text-muted">Rentabilidad</small>
-                    <h4>
-                        @Model.PorcentajeRentabilidad.ToString("N2")%
-                    </h4>
+                    <h4>@Model.PorcentajeRentabilidad.ToString("N2")%</h4>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+
+            <h5 class="fw-bold mb-3">Gastos agrupados</h5>
+
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <small class="text-muted">Camión</small>
+                    <h4>@Model.GastosCamion.ToString("C2")</h4>
                 </div>
 
+                <div class="col-md-4">
+                    <small class="text-muted">Varios</small>
+                    <h4>@Model.GastosVarios.ToString("C2")</h4>
+                </div>
+
+                <div class="col-md-4">
+                    <small class="text-muted">Producción</small>
+                    <h4>@Model.GastosProduccion.ToString("C2")</h4>
+                </div>
             </div>
 
         </div>
     </div>
 
-    <div class="mt-4">
-        <a asp-action="Index"
-           class="btn btn-secondary">
+    <div class="card mb-4">
+        <div class="card-body">
+
+            <h5 class="fw-bold mb-3">Detalle de gastos</h5>
+
+            @if (!Model.Gastos.Any())
+            {
+                <div class="alert alert-info mb-0">
+                    Este flete no tiene gastos registrados.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Grupo</th>
+                                <th>Tipo</th>
+                                <th>Concepto</th>
+                                <th>Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var gasto in Model.Gastos)
+                            {
+                                <tr>
+                                    <td>@gasto.Grupo</td>
+                                    <td>@gasto.TipoGasto</td>
+                                    <td>@gasto.Concepto</td>
+                                    <td>@gasto.Monto.ToString("C2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index" class="btn btn-secondary">
             Volver
         </a>
 
