@@ -1,4 +1,5 @@
-﻿using Transportes_Orellana.Models;
+﻿namespace Transportes_Orellana.Models;
+using Transportes_Orellana.Models;
 
 public class Flete
 {

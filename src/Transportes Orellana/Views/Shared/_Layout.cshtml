@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Transportes Orellana</title>
-    
+
     <!-- Bootstrap CSS predeterminado de .NET Core -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <!-- Bootstrap Icons (CDN) para los íconos del menú y botones -->
@@ -67,41 +67,41 @@
             flex-grow: 1;
         }
 
-        .sidebar-menu .nav-item {
-            margin-bottom: 0.3rem;
-        }
+            .sidebar-menu .nav-item {
+                margin-bottom: 0.3rem;
+            }
 
-        .sidebar-menu .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 0.65rem 0.95rem;
-            color: #d1d9e6;
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-        }
+            .sidebar-menu .nav-link {
+                display: flex;
+                align-items: center;
+                padding: 0.65rem 0.95rem;
+                color: #d1d9e6;
+                text-decoration: none;
+                font-size: 0.9rem;
+                font-weight: 500;
+                border-radius: 8px;
+                transition: all 0.2s ease;
+            }
 
-        .sidebar-menu .nav-link i {
-            font-size: 1.15rem;
-            margin-right: 0.85rem;
-            width: 20px;
-            text-align: center;
-        }
+                .sidebar-menu .nav-link i {
+                    font-size: 1.15rem;
+                    margin-right: 0.85rem;
+                    width: 20px;
+                    text-align: center;
+                }
 
-        .sidebar-menu .nav-link:hover {
-            background-color: var(--sidebar-hover);
-            color: #ffffff;
-        }
+                .sidebar-menu .nav-link:hover {
+                    background-color: var(--sidebar-hover);
+                    color: #ffffff;
+                }
 
-        /* Estado Activo del Menú */
-        .sidebar-menu .nav-link.active {
-            background-color: var(--primary-blue);
-            color: #ffffff;
-            font-weight: 600;
-            box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
-        }
+                /* Estado Activo del Menú */
+                .sidebar-menu .nav-link.active {
+                    background-color: var(--primary-blue);
+                    color: #ffffff;
+                    font-weight: 600;
+                    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+                }
 
         /* Área de contenido */
         .app-main {
@@ -164,62 +164,62 @@
 
             <ul class="sidebar-menu">
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="Index">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">
                         <i class="bi bi-grid"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Solicitudes" asp-action="Index">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Solicitudes" ? "active" : "")" asp-controller="Solicitudes" asp-action="Index">
                         <i class="bi bi-file-earmark-text"></i> Solicitudes
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Viajes" asp-action="Index">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Viajes" ? "active" : "")" asp-controller="Viajes" asp-action="Index">
                         <i class="bi bi-truck"></i> Viajes
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Clientes" asp-action="Index">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Clientes" ? "active" : "")" asp-controller="Clientes" asp-action="Index">
                         <i class="bi bi-people"></i> Clientes
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Cotizaciones" asp-action="Index">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cotizaciones" ? "active" : "")" asp-controller="Cotizaciones" asp-action="Index">
                         <i class="bi bi-receipt"></i> Cotizaciones
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Camiones" asp-action="Index">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Camiones" ? "active" : "")" asp-controller="Camiones" asp-action="Index">
                         <i class="bi bi-truck-front"></i> Camiones
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Motoristas" asp-action="Index">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Motoristas" ? "active" : "")" asp-controller="Motoristas" asp-action="Index">
                         <i class="bi bi-person-badge"></i> Motoristas
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Gastos" asp-action="Index">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Gastos" ? "active" : "")" asp-controller="Gastos" asp-action="Index">
                         <i class="bi bi-wallet2"></i> Gastos
                     </a>
                 </li>
                 <li class="nav-item">
-                   <a <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "CalculoUtilidades" ? "active" : "")" asp-controller="CalculoUtilidades" asp-action="Index">
-                       <i class="bi bi-cash-coin"></i> Utilidades
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "CalculoUtilidades" ? "active" : "")" asp-controller="CalculoUtilidades" asp-action="Index">
+                        <i class="bi bi-cash-coin"></i> Utilidades
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Pagos" asp-action="Index">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Pagos" ? "active" : "")" asp-controller="Pagos" asp-action="Index">
                         <i class="bi bi-credit-card"></i> Pagos
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Reportes" asp-action="Index">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Reportes" ? "active" : "")" asp-controller="Reportes" asp-action="Index">
                         <i class="bi bi-bar-chart"></i> Reportes
                     </a>
                 </li>
                 <li class="nav-item mt-3">
-                    <a class="nav-link text-muted-custom" asp-controller="Configuracion" asp-action="Index">
+                    <a class="nav-link text-muted-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Configuracion" ? "active" : "")" asp-controller="Configuracion" asp-action="Index">
                         <i class="bi bi-gear"></i> Configuración
                     </a>
                 </li>
@@ -245,9 +245,9 @@
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
                         <div class="dropdown">
-                            <button class="btn border-0 d-flex align-items-center gap-2 text-dark fw-semibold p-0" 
-                                    type="button" 
-                                    data-bs-toggle="dropdown" 
+                            <button class="btn border-0 d-flex align-items-center gap-2 text-dark fw-semibold p-0"
+                                    type="button"
+                                    data-bs-toggle="dropdown"
                                     aria-expanded="false">
                                 <i class="bi bi-person-circle fs-5 text-primary"></i>
                                 <span class="small">@User.Identity.Name</span>

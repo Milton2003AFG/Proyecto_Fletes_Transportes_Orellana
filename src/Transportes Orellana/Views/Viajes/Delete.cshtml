@@ -1,0 +1,84 @@
+﻿@model Transportes_Orellana.Models.Flete
+
+@{
+    ViewData["Title"] = "Eliminar Viaje";
+}
+
+<div class="d-flex align-items-center mb-4">
+    <a asp-action="Index" class="btn btn-outline-secondary me-3" style="border-radius: 8px;">
+        <i class="bi bi-arrow-left"></i>
+    </a>
+    <h2 class="fw-bold text-dark mb-0">Eliminar viaje</h2>
+</div>
+
+<div class="card border-danger shadow-sm">
+    <div class="card-body p-4">
+        <div class="alert alert-warning border-0 shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            ¿Está seguro que desea eliminar este viaje del sistema? Esta acción no se puede deshacer.
+        </div>
+
+        <dl class="row mt-3">
+            <dt class="col-sm-3 text-secondary">ID de Viaje</dt>
+            <dd class="col-sm-9 fw-semibold">#@Model.Id</dd>
+
+            <dt class="col-sm-3 text-secondary">Cliente</dt>
+            <dd class="col-sm-9">
+                @if (Model.Cliente != null)
+                {
+                    <span>@Model.Cliente.Nombre @Model.Cliente.Apellido</span>
+                }
+                else
+                {
+                    <span class="text-muted">No asignado</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3 text-secondary">Camión Asignado</dt>
+            <dd class="col-sm-9">
+                @if (Model.Unidad != null)
+                {
+                    <span>Placa: @Model.Unidad.Placa</span>
+                }
+                else
+                {
+                    <span class="text-muted">No asignado</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3 text-secondary">Motorista</dt>
+            <dd class="col-sm-9">
+                @if (Model.Motorista != null)
+                {
+                    <span>@Model.Motorista.Nombre @Model.Motorista.Apellido</span>
+                }
+                else
+                {
+                    <span class="text-muted">No asignado</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3 text-secondary">Monto de Cobro</dt>
+            <dd class="col-sm-9 fw-bold text-success">$@Model.MontoCobro</dd>
+
+            <dt class="col-sm-3 text-secondary">Origen (Carga)</dt>
+            <dd class="col-sm-9">@Model.LugarRecolecta</dd>
+
+            <dt class="col-sm-3 text-secondary">Destino (Descarga)</dt>
+            <dd class="col-sm-9">@Model.LugarEntrega</dd>
+
+            <dt class="col-sm-3 text-secondary">Estado</dt>
+            <dd class="col-sm-9">
+                <span class="badge bg-secondary">@Model.Estado</span>
+            </dd>
+        </dl>
+
+        <form asp-action="Delete" class="mt-4 pt-2 border-top">
+            <input type="hidden" asp-for="Id" />
+            <div class="d-flex justify-content-end gap-2">
+                <a asp-action="Index" class="btn btn-outline-secondary px-4" style="border-radius: 8px;">Cancelar</a>
+                <button type="submit" class="btn btn-danger px-4 shadow-sm" style="border-radius: 8px;">Eliminar viaje</button>
+            </div>
+        </form>
+    </div>
+</div>

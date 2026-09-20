@@ -4,6 +4,9 @@ using Transportes_Orellana.Data;
 using Transportes_Orellana.Services.Interfaces;
 using Transportes_Orellana.Services.Implementations;
 
+// Configuración para permitir fechas sin zona horaria en PostgreSQL
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>

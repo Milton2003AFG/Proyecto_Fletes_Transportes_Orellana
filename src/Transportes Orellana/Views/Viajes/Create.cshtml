@@ -1,0 +1,103 @@
+﻿@model Transportes_Orellana.Models.Flete
+
+@{
+    ViewData["Title"] = "Registrar Nuevo Viaje";
+}
+
+<div class="container-fluid px-4">
+    <div class="my-4">
+        <h2 class="fw-bold text-dark">Registrar Nuevo Viaje</h2>
+    </div>
+
+    <!-- Alerta para mostrar errores de validación si faltan datos -->
+    <div asp-validation-summary="All" class="alert alert-danger rounded-4 mb-4" role="alert"></div>
+
+    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        <form asp-action="Create" method="post">
+            <h5 class="fw-bold text-dark mb-4">Datos del viaje</h5>
+
+            <div class="row">
+                <!-- Columna Izquierda -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Cliente:</label>
+                        <select asp-for="ClienteId" class="form-select bg-light border-0 py-2" asp-items="ViewBag.ClienteId">
+                            <option value="">Seleccione un cliente...</option>
+                        </select>
+                        <span asp-validation-for="ClienteId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Camión asignado:</label>
+                        <select asp-for="UnidadId" class="form-select bg-light border-0 py-2" asp-items="ViewBag.UnidadId">
+                            <option value="">Seleccione un camión...</option>
+                        </select>
+                        <span asp-validation-for="UnidadId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Fecha y hora de carga (Salida):</label>
+                        <input asp-for="HoraSalida" type="datetime-local" class="form-control bg-light border-0 py-2" />
+                        <span asp-validation-for="HoraSalida" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Dirección de descarga:</label>
+                        <input asp-for="LugarEntrega" class="form-control bg-light border-0 py-2" placeholder="Ej. Ciudad de Guatemala" />
+                        <span asp-validation-for="LugarEntrega" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Ruta / Consideraciones:</label>
+                        <textarea asp-for="Consideraciones" class="form-control bg-light border-0" rows="3" placeholder="Ej. Via CA-1, frontera El Poy"></textarea>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Motorista asignado:</label>
+                        <select asp-for="MotoristaId" class="form-select bg-light border-0 py-2" asp-items="ViewBag.MotoristaId">
+                            <option value="">Seleccione un motorista...</option>
+                        </select>
+                        <span asp-validation-for="MotoristaId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Dirección de carga:</label>
+                        <input asp-for="LugarRecolecta" class="form-control bg-light border-0 py-2" placeholder="Ej. Bodega San Salvador" />
+                        <span asp-validation-for="LugarRecolecta" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Monto de cobro:</label>
+                        <input asp-for="MontoCobro" type="number" step="0.01" class="form-control bg-light border-0 py-2" placeholder="0.00" />
+                        <span asp-validation-for="MontoCobro" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Estado:</label>
+                        <select asp-for="Estado" class="form-select bg-light border-0 py-2">
+                            <option value="Programado">Programado</option>
+                            <option value="En_Proceso">En Proceso</option>
+                            <option value="Finalizado">Finalizado</option>
+                        </select>
+                        <span asp-validation-for="Estado" class="text-danger small"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2" style="border-radius: 8px;">Cancelar</a>
+                <button type="submit" class="btn btn-primary px-4 py-2" style="border-radius: 8px;">Guardar viaje</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

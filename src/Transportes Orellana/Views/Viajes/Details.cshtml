@@ -1,0 +1,72 @@
+﻿@model Transportes_Orellana.Models.Flete
+
+@{
+    ViewData["Title"] = "Detalles del Viaje";
+}
+
+<div class="container mt-4">
+    <h2><i class="bi bi-info-circle"></i> Detalles del Viaje</h2>
+    <hr />
+
+    <div class="card shadow-sm p-4">
+        <dl class="row">
+            <dt class="col-sm-3">ID de Viaje:</dt>
+            <dd class="col-sm-9">@Model.Id</dd>
+
+            <dt class="col-sm-3">Cliente:</dt>
+            <dd class="col-sm-9">
+                @if (Model.Cliente != null)
+                {
+                    <span>@Model.Cliente.Nombre @Model.Cliente.Apellido</span>
+                }
+                else
+                {
+                    <span class="text-muted">No asignado</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Unidad de Transporte:</dt>
+            <dd class="col-sm-9">
+                @if (Model.Unidad != null)
+                {
+                    <span>Placa: @Model.Unidad.Placa</span>
+                }
+                else
+                {
+                    <span class="text-muted">No asignada</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Motorista:</dt>
+            <dd class="col-sm-9">
+                @if (Model.Motorista != null)
+                {
+                    <span>@Model.Motorista.Nombre @Model.Motorista.Apellido</span>
+                }
+                else
+                {
+                    <span class="text-muted">No asignado</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Monto de Cobro:</dt>
+            <dd class="col-sm-9">$@Model.MontoCobro</dd>
+
+            <dt class="col-sm-3">Lugar de Recolecta:</dt>
+            <dd class="col-sm-9">@Model.LugarRecolecta</dd>
+
+            <dt class="col-sm-3">Lugar de Entrega:</dt>
+            <dd class="col-sm-9">@Model.LugarEntrega</dd>
+
+            <dt class="col-sm-3">Estado:</dt>
+            <dd class="col-sm-9">
+                <span class="badge bg-secondary">@Model.Estado</span>
+            </dd>
+        </dl>
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Editar</a>
+        <a asp-action="Index" class="btn btn-secondary">Regresar a la Lista</a>
+    </div>
+</div>

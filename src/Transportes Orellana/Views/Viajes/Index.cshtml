@@ -1,0 +1,109 @@
+﻿@model IEnumerable<Transportes_Orellana.Models.Flete>
+
+@{
+    ViewData["Title"] = "Viajes";
+}
+
+@if (TempData["Exito"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
+        <i class="bi bi-check-circle me-2"></i> @TempData["Exito"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+
+        <!-- 1. Encabezado -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold text-dark mb-0">Viajes</h3>
+            <a asp-action="Create" class="btn btn-primary px-3 shadow-sm" style="border-radius: 8px;">
+                <i class="bi bi-plus-lg me-1"></i> Nuevo viaje
+            </a>
+        </div>
+
+        <!-- 2. Buscador -->
+        <div class="mb-4" style="max-width: 380px;">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0 text-muted ps-3">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" id="buscarViaje" class="form-control border-start-0 ps-2" placeholder="Buscar viaje...">
+            </div>
+        </div>
+
+        <!-- 3. Tabla -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" id="tablaViajes">
+                <thead class="text-secondary small fw-bold">
+                    <tr>
+                        <th class="border-0 ps-0">ID</th>
+                        <th class="border-0">Cliente</th>
+                        <th class="border-0">Carga (Origen)</th>
+                        <th class="border-0">Descarga (Destino)</th>
+                        <th class="border-0">Fecha y Hora Salida</th>
+                        <th class="border-0">Camión</th>
+                        <th class="border-0">Estado</th>
+                        <th class="border-0 text-center pe-0">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="border-top-0">
+                    @foreach (var viaje in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold text-dark ps-0">#@viaje.Id</td>
+                            <td class="text-muted">@(viaje.Cliente != null ? viaje.Cliente.Nombre : "Sin cliente")</td>
+                            <td class="text-muted">@viaje.LugarRecolecta</td>
+                            <td class="text-muted">@viaje.LugarEntrega</td>
+                            <td class="text-muted">@viaje.HoraSalida.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="text-muted">@(viaje.Unidad != null ? viaje.Unidad.Placa : "Sin asignar")</td>
+                            <td>
+                                @if (viaje.Estado?.ToLower() == "en_proceso" || viaje.Estado?.ToLower() == "programado")
+                                {
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-pill">@viaje.Estado</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1 rounded-pill">@viaje.Estado</span>
+                                }
+                            </td>
+                            <td class="text-center pe-0">
+                                <a asp-action="Details" asp-route-id="@viaje.Id" class="btn btn-sm text-secondary p-1" title="Ver detalles">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@viaje.Id" class="btn btn-sm text-primary p-1" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@viaje.Id" class="btn btn-sm text-danger p-1" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="bi bi-truck display-4"></i>
+                <p class="mt-2 fw-medium">No hay viajes registrados aún.</p>
+                <a asp-action="Create" class="btn btn-sm btn-primary">Registrar primer viaje</a>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('buscarViaje').addEventListener('keyup', function () {
+            const filtro = this.value.toLowerCase();
+            const filas = document.querySelectorAll('#tablaViajes tbody tr');
+            filas.forEach(fila => {
+                fila.style.display = fila.textContent.toLowerCase().includes(filtro) ? '' : 'none';
+            });
+        });
+    </script>
+}
