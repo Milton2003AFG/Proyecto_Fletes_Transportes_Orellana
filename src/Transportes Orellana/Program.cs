@@ -33,6 +33,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<ICalculoUtilidadesService, CalculoUtilidadesService>();
+builder.Services.AddScoped<IGastoFleteService, GastoFleteService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
