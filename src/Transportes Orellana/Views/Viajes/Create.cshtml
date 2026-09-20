@@ -9,8 +9,13 @@
         <h2 class="fw-bold text-dark">Registrar Nuevo Viaje</h2>
     </div>
 
-    <!-- Alerta para mostrar errores de validación si faltan datos -->
-    <div asp-validation-summary="All" class="alert alert-danger rounded-4 mb-4" role="alert"></div>
+    <!-- Alerta de errores (Solo aparece si hay validaciones fallidas) -->
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger rounded-4 mb-4" role="alert">
+            <div asp-validation-summary="All" class="text-danger mb-0"></div>
+        </div>
+    }
 
     <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
         <form asp-action="Create" method="post">
@@ -78,9 +83,11 @@
                     <div class="mb-3">
                         <label class="form-label text-muted small fw-bold">Estado:</label>
                         <select asp-for="Estado" class="form-select bg-light border-0 py-2">
-                            <option value="Programado">Programado</option>
-                            <option value="En_Proceso">En Proceso</option>
-                            <option value="Finalizado">Finalizado</option>
+                            <option value="programado">Programado</option>
+                            <option value="en_proceso">En Proceso</option>
+                            <option value="terminado">Terminado</option>
+                            <option value="con_devolucion">Con Devolución</option>
+                            <option value="con_queja">Con Queja</option>
                         </select>
                         <span asp-validation-for="Estado" class="text-danger small"></span>
                     </div>

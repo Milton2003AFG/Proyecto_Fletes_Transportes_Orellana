@@ -67,6 +67,18 @@ public class ViajesController : Controller
         ModelState.Remove("Motorista");
         ModelState.Remove("Gastos");
 
+        // Validación: La fecha y hora de salida no puede ser anterior a la actual
+        if (viaje.HoraSalida < DateTime.Now)
+        {
+            ModelState.AddModelError("HoraSalida", "La fecha y hora de salida no puede ser anterior a la actual.");
+        }
+
+        // Validación: El monto de cobro no puede ser menor o igual a 0
+        if (viaje.MontoCobro <= 0)
+        {
+            ModelState.AddModelError("MontoCobro", "El monto de cobro debe ser mayor a 0.");
+        }
+
         if (ModelState.IsValid)
         {
             try
@@ -79,7 +91,8 @@ public class ViajesController : Controller
                 // Validación: Si se crea como finalizado, redirigir a gastos
                 if (!string.IsNullOrEmpty(viaje.Estado) &&
                     (viaje.Estado.Equals("Finalizado", StringComparison.OrdinalIgnoreCase) ||
-                     viaje.Estado.Equals("Completado", StringComparison.OrdinalIgnoreCase)))
+                     viaje.Estado.Equals("Completado", StringComparison.OrdinalIgnoreCase) ||
+                     viaje.Estado.Equals("terminado", StringComparison.OrdinalIgnoreCase)))
                 {
                     return RedirectToAction("Index", "Gastos", new { fleteId = viaje.Id });
                 }
@@ -134,6 +147,18 @@ public class ViajesController : Controller
         ModelState.Remove("Motorista");
         ModelState.Remove("Gastos");
 
+        // Validación: La fecha y hora de salida no puede ser anterior a la actual
+        if (viaje.HoraSalida < DateTime.Now)
+        {
+            ModelState.AddModelError("HoraSalida", "La fecha y hora de salida no puede ser anterior a la actual.");
+        }
+
+        // Validación: El monto de cobro no puede ser menor o igual a 0
+        if (viaje.MontoCobro <= 0)
+        {
+            ModelState.AddModelError("MontoCobro", "El monto de cobro debe ser mayor a 0.");
+        }
+
         if (ModelState.IsValid)
         {
             try
@@ -145,7 +170,8 @@ public class ViajesController : Controller
                 // Validación: Si al editar se cambia a finalizado, redirigir a gastos
                 if (!string.IsNullOrEmpty(viaje.Estado) &&
                     (viaje.Estado.Equals("Finalizado", StringComparison.OrdinalIgnoreCase) ||
-                     viaje.Estado.Equals("Completado", StringComparison.OrdinalIgnoreCase)))
+                     viaje.Estado.Equals("Completado", StringComparison.OrdinalIgnoreCase) ||
+                     viaje.Estado.Equals("terminado", StringComparison.OrdinalIgnoreCase)))
                 {
                     return RedirectToAction("Index", "Gastos", new { fleteId = viaje.Id });
                 }
