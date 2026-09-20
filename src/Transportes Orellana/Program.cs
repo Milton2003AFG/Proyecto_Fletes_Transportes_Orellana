@@ -3,11 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Transportes_Orellana.Data;
 using Transportes_Orellana.Services.Interfaces;
 using Transportes_Orellana.Services.Implementations;
+using QuestPDF.Infrastructure;
 
 // Configuración para permitir fechas sin zona horaria en PostgreSQL
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
+QuestPDF.Settings.License = LicenseType.Community;
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -33,6 +35,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<ICalculoUtilidadesService, CalculoUtilidadesService>();
+builder.Services.AddScoped<IReporteUtilidadesPdfService, ReporteUtilidadesPdfService>();
 builder.Services.AddScoped<IGastoFleteService, GastoFleteService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();

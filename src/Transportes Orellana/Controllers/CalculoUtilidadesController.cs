@@ -8,11 +8,14 @@ namespace Transportes_Orellana.Controllers;
 public class CalculoUtilidadesController : Controller
 {
     private readonly ICalculoUtilidadesService _calculoUtilidadesService;
+    private readonly IReporteUtilidadesPdfService _reportePdfService;
 
     public CalculoUtilidadesController(
-        ICalculoUtilidadesService calculoUtilidadesService)
+        ICalculoUtilidadesService calculoUtilidadesService,
+        IReporteUtilidadesPdfService reportePdfService)
     {
         _calculoUtilidadesService = calculoUtilidadesService;
+        _reportePdfService = reportePdfService;
     }
 
     public async Task<IActionResult> Index()
@@ -39,5 +42,27 @@ public class CalculoUtilidadesController : Controller
         }
 
         return View(utilidad);
+    }
+
+    public async Task<IActionResult> DescargarPdf(int id)
+    {
+        var utilidad =
+            await _calculoUtilidadesService.ObtenerPorFleteAsync(id);
+
+        if (utilidad == null)
+        {
+            return NotFound();
+        }
+
+        var pdf = _reportePdfService.GenerarReporte(utilidad);
+
+        var nombreArchivo =
+            $"Utilidad_Flete_{utilidad.FleteId:D3}.pdf";
+
+        return File(
+            pdf,
+            "application/pdf",
+            nombreArchivo
+        );
     }
 }
