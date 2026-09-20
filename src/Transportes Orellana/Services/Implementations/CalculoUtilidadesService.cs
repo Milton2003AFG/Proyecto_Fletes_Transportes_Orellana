@@ -18,6 +18,7 @@ public class CalculoUtilidadesService : ICalculoUtilidadesService
     public async Task<IEnumerable<CalculoUtilidadViewModel>> ObtenerTodosAsync()
     {
         var fletes = await _context.Fletes
+            .AsNoTracking()
             .Include(f => f.Cliente)
             .Include(f => f.Motorista)
             .Include(f => f.Unidad)
@@ -26,12 +27,15 @@ public class CalculoUtilidadesService : ICalculoUtilidadesService
             .OrderByDescending(f => f.FechaRegistro)
             .ToListAsync();
 
-        return fletes.Select(CrearViewModel).ToList();
+        return fletes
+            .Select(CrearViewModel)
+            .ToList();
     }
 
     public async Task<CalculoUtilidadViewModel?> ObtenerPorFleteAsync(int fleteId)
     {
         var flete = await _context.Fletes
+            .AsNoTracking()
             .Include(f => f.Cliente)
             .Include(f => f.Motorista)
             .Include(f => f.Unidad)
@@ -52,31 +56,42 @@ public class CalculoUtilidadesService : ICalculoUtilidadesService
     {
         var gastos = flete.Gastos ?? new List<GastoFlete>();
 
-        var detalleGastos = gastos.Select(g => new GastoDetalleViewModel
-        {
-            TipoGasto = g.TipoGasto,
-            Concepto = g.Concepto,
-            Monto = g.Monto,
-            Grupo = ObtenerGrupoGasto(g)
-        }).ToList();
+        var detalleGastos = gastos
+            .Select(g => new GastoDetalleViewModel
+            {
+                TipoGasto = g.TipoGasto,
+                Concepto = g.Concepto,
+                Monto = g.Monto,
+                Grupo = ObtenerNombreGrupo(g.TipoGasto)
+            })
+            .ToList();
 
-        var gastosCamion = detalleGastos
-            .Where(g => g.Grupo == "Camión")
+        var gastosCamion = gastos
+            .Where(g => string.Equals(
+                g.TipoGasto,
+                "camion",
+                StringComparison.OrdinalIgnoreCase))
             .Sum(g => g.Monto);
 
-        var gastosVarios = detalleGastos
-            .Where(g => g.Grupo == "Varios")
+        var gastosVarios = gastos
+            .Where(g => string.Equals(
+                g.TipoGasto,
+                "varios",
+                StringComparison.OrdinalIgnoreCase))
             .Sum(g => g.Monto);
 
-        var gastosProduccion = detalleGastos
-            .Where(g => g.Grupo == "Producción")
+        var gastosProduccion = gastos
+            .Where(g => string.Equals(
+                g.TipoGasto,
+                "produccion",
+                StringComparison.OrdinalIgnoreCase))
             .Sum(g => g.Monto);
 
-        var totalGastos = detalleGastos.Sum(g => g.Monto);
+        var totalGastos = gastos.Sum(g => g.Monto);
 
         var utilidadNeta = flete.MontoCobro - totalGastos;
 
-        var rentabilidad = flete.MontoCobro > 0
+        var porcentajeRentabilidad = flete.MontoCobro > 0
             ? (utilidadNeta / flete.MontoCobro) * 100
             : 0;
 
@@ -105,7 +120,7 @@ public class CalculoUtilidadesService : ICalculoUtilidadesService
 
             TotalGastos = totalGastos,
             UtilidadNeta = utilidadNeta,
-            PorcentajeRentabilidad = rentabilidad,
+            PorcentajeRentabilidad = porcentajeRentabilidad,
 
             FechaRegistro = flete.FechaRegistro,
             Estado = flete.Estado,
@@ -114,34 +129,14 @@ public class CalculoUtilidadesService : ICalculoUtilidadesService
         };
     }
 
-    private string ObtenerGrupoGasto(GastoFlete gasto)
+    private string ObtenerNombreGrupo(string tipoGasto)
     {
-        var tipo = gasto.TipoGasto.ToLower();
-        var concepto = gasto.Concepto.ToLower();
-
-        if (tipo == "mantenimiento" ||
-            concepto.Contains("bateria") ||
-            concepto.Contains("batería") ||
-            concepto.Contains("llanta") ||
-            concepto.Contains("aceite"))
+        return tipoGasto.Trim().ToLowerInvariant() switch
         {
-            return "Camión";
-        }
-
-        if (tipo == "hospedaje" ||
-            tipo == "peaje" ||
-            concepto.Contains("parqueo"))
-        {
-            return "Varios";
-        }
-
-        if (tipo == "combustible" ||
-            concepto.Contains("motorista") ||
-            concepto.Contains("ayudante"))
-        {
-            return "Producción";
-        }
-
-        return "Varios";
+            "camion" => "Camión",
+            "varios" => "Varios",
+            "produccion" => "Producción",
+            _ => "Sin clasificar"
+        };
     }
 }
