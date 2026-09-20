@@ -1,0 +1,41 @@
+@model GastoFlete
+
+@{
+    ViewData["Title"] = "Eliminar Gasto";
+}
+
+<div class="card border-0 shadow-sm" style="max-width: 600px; margin: 0 auto;">
+    <div class="card-body p-4">
+        <!-- Encabezado -->
+        <div class="d-flex align-items-center mb-3 text-danger">
+            <i class="bi bi-exclamation-triangle-fill fs-3 me-2"></i>
+            <h4 class="fw-bold mb-0">¿Eliminar este gasto?</h4>
+        </div>
+        
+        <p class="text-muted mb-4">Esta acción no se puede deshacer. Se descontará del balance total de este viaje.</p>
+
+        <div class="bg-light p-3 rounded-3 mb-4 border">
+            <div class="row g-2">
+                <div class="col-4 text-secondary small fw-semibold">Tipo:</div>
+                <div class="col-8 fw-bold text-capitalize">@Model.TipoGasto</div>
+
+                <div class="col-4 text-secondary small fw-semibold">Descripción:</div>
+                <div class="col-8">@Model.Concepto</div>
+
+                <div class="col-4 text-secondary small fw-semibold">Monto:</div>
+                <div class="col-8 fw-bold text-danger">$ @Model.Monto.ToString("N2")</div>
+
+                <div class="col-4 text-secondary small fw-semibold">Fecha:</div>
+                <div class="col-8 text-muted">@Model.FechaRegistro.ToString("dd/MM/yyyy")</div>
+            </div>
+        </div>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <div class="d-flex justify-content-end gap-2">
+                <a asp-action="Details" asp-route-id="@Model.FleteId" class="btn btn-light border px-4" style="border-radius: 8px;">Cancelar</a>
+                <button type="submit" class="btn btn-danger px-4 shadow-sm" style="border-radius: 8px;">Eliminar gasto</button>
+            </div>
+        </form>
+    </div>
+</div>

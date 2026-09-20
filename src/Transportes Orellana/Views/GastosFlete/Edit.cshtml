@@ -1,0 +1,64 @@
+@model GastoFlete
+
+@{
+    ViewData["Title"] = "Editar Gasto";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+        <!-- Encabezado -->
+        <div class="d-flex align-items-center mb-4">
+            <a asp-action="Details" asp-route-id="@Model.FleteId" class="btn btn-sm btn-light border me-3 text-secondary" style="border-radius: 8px;" title="Regresar">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <h3 class="fw-bold text-dark mb-0">Editar gasto</h3>
+        </div>
+
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 shadow-sm py-2" role="alert"></div>
+
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="FleteId" />
+
+            <div class="row g-3">
+                <!-- Tipo de gasto -->
+                <div class="col-md-6">
+                    <label asp-for="TipoGasto" class="form-label text-secondary small fw-semibold">Tipo de gasto (Concepto)</label>
+                    <select asp-for="TipoGasto" class="form-select">
+                        <option value="camion">Camión</option>
+                        <option value="produccion">Producción</option>
+                        <option value="varios">Varios</option>
+                    </select>
+                    <span asp-validation-for="TipoGasto" class="text-danger small"></span>
+                </div>
+
+                <!-- Monto -->
+                <div class="col-md-6">
+                    <label asp-for="Monto" class="form-label text-secondary small fw-semibold">Monto (USD)</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white text-muted">$</span>
+                        <input asp-for="Monto" type="number" step="0.01" class="form-control" />
+                    </div>
+                    <span asp-validation-for="Monto" class="text-danger small"></span>
+                </div>
+
+                <!-- Concepto / Descripción -->
+                <div class="col-12">
+                    <label asp-for="Concepto" class="form-label text-secondary small fw-semibold">Descripción del gasto</label>
+                    <input asp-for="Concepto" class="form-control" maxlength="100" />
+                    <span asp-validation-for="Concepto" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="mt-4 pt-2 d-flex justify-content-end gap-2">
+                <a asp-action="Details" asp-route-id="@Model.FleteId" class="btn btn-light border px-4" style="border-radius: 8px;">Cancelar</a>
+                <button type="submit" class="btn btn-primary px-4 shadow-sm" style="border-radius: 8px;">Guardar cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
