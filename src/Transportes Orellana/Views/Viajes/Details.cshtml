@@ -11,7 +11,7 @@
     <div class="card shadow-sm p-4">
         <dl class="row">
             <dt class="col-sm-3">ID de Viaje:</dt>
-            <dd class="col-sm-9">@Model.Id</dd>
+            <dd class="col-sm-9">#@Model.Id</dd>
 
             <dt class="col-sm-3">Cliente:</dt>
             <dd class="col-sm-9">
@@ -25,19 +25,7 @@
                 }
             </dd>
 
-            <dt class="col-sm-3">Unidad de Transporte:</dt>
-            <dd class="col-sm-9">
-                @if (Model.Unidad != null)
-                {
-                    <span>Placa: @Model.Unidad.Placa</span>
-                }
-                else
-                {
-                    <span class="text-muted">No asignada</span>
-                }
-            </dd>
-
-            <dt class="col-sm-3">Motorista:</dt>
+            <dt class="col-sm-3">Motorista Asignado:</dt>
             <dd class="col-sm-9">
                 @if (Model.Motorista != null)
                 {
@@ -49,18 +37,43 @@
                 }
             </dd>
 
+            <dt class="col-sm-3">Camión Asignado:</dt>
+            <dd class="col-sm-9">
+                @if (Model.Unidad != null)
+                {
+                    <span>Placa: @Model.Unidad.Placa</span>
+                }
+                else
+                {
+                    <span class="text-muted">No asignada</span>
+                }
+            </dd>
+
+            
+
+            <dt class="col-sm-3">Dirección de Carga:</dt>
+            <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.LugarRecolecta) ? "No especificada" : Model.LugarRecolecta)</dd>
+
+            <dt class="col-sm-3">Dirección de Descarga:</dt>
+            <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.LugarEntrega) ? "No especificada" : Model.LugarEntrega)</dd>
+
+            <dt class="col-sm-3">Fecha y Hora de Salida:</dt>
+            <dd class="col-sm-9">@Model.HoraSalida.ToString("dd/MM/yyyy HH:mm")</dd>
+
+            <dt class="col-sm-3">Fecha y Hora de Destino (Llegada):</dt>
+            <dd class="col-sm-9">@Model.HoraDestino.ToString("dd/MM/yyyy HH:mm")</dd>
+
             <dt class="col-sm-3">Monto de Cobro:</dt>
-            <dd class="col-sm-9">$@Model.MontoCobro</dd>
-
-            <dt class="col-sm-3">Lugar de Recolecta:</dt>
-            <dd class="col-sm-9">@Model.LugarRecolecta</dd>
-
-            <dt class="col-sm-3">Lugar de Entrega:</dt>
-            <dd class="col-sm-9">@Model.LugarEntrega</dd>
+            <dd class="col-sm-9">$@Model.MontoCobro.ToString("N2")</dd>
 
             <dt class="col-sm-3">Estado:</dt>
             <dd class="col-sm-9">
                 <span class="badge bg-secondary">@Model.Estado</span>
+            </dd>
+
+            <dt class="col-sm-3">Ruta / Consideraciones:</dt>
+            <dd class="col-sm-9">
+                @(string.IsNullOrEmpty(Model.Consideraciones) ? "Sin consideraciones registradas." : Model.Consideraciones)
             </dd>
         </dl>
     </div>

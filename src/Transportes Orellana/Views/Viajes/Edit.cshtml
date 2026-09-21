@@ -47,6 +47,13 @@
                         <span asp-validation-for="HoraSalida" class="text-danger small"></span>
                     </div>
 
+                    <!-- Hora de Destino -->
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Fecha y hora de destino (Llegada):</label>
+                        <input asp-for="HoraDestino" type="datetime-local" class="form-control bg-light border-0 py-2" />
+                        <span asp-validation-for="HoraDestino" class="text-danger small"></span>
+                    </div>
+
                     <div class="mb-3">
                         <label class="form-label text-muted small fw-bold">Dirección de descarga:</label>
                         <input asp-for="LugarEntrega" class="form-control bg-light border-0 py-2" placeholder="Ej. Ciudad de Guatemala" />
