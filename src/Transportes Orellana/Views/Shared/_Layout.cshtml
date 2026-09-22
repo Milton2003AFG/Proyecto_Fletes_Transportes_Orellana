@@ -169,11 +169,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Solicitudes" ? "active" : "")" asp-controller="Solicitudes" asp-action="Index">
-                        <i class="bi bi-file-earmark-text"></i> Solicitudes
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Viajes" ? "active" : "")" asp-controller="Viajes" asp-action="Index">
                         <i class="bi bi-truck"></i> Viajes
                     </a>
@@ -181,11 +176,6 @@
                 <li class="nav-item">
                     <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Clientes" ? "active" : "")" asp-controller="Clientes" asp-action="Index">
                         <i class="bi bi-people"></i> Clientes
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cotizaciones" ? "active" : "")" asp-controller="Cotizaciones" asp-action="Index">
-                        <i class="bi bi-receipt"></i> Cotizaciones
                     </a>
                 </li>
                 <li class="nav-item">
@@ -206,16 +196,6 @@
                 <li class="nav-item">
                     <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "CalculoUtilidades" ? "active" : "")" asp-controller="CalculoUtilidades" asp-action="Index">
                         <i class="bi bi-cash-coin"></i> Utilidades
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Pagos" ? "active" : "")" asp-controller="Pagos" asp-action="Index">
-                        <i class="bi bi-credit-card"></i> Pagos
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Reportes" ? "active" : "")" asp-controller="Reportes" asp-action="Index">
-                        <i class="bi bi-bar-chart"></i> Reportes
                     </a>
                 </li>
                 <li class="nav-item mt-3">
