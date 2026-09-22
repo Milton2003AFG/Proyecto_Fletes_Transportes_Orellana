@@ -37,6 +37,8 @@ builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<ICalculoUtilidadesService, CalculoUtilidadesService>();
 builder.Services.AddScoped<IReporteUtilidadesPdfService, ReporteUtilidadesPdfService>();
 builder.Services.AddScoped<IGastoFleteService, GastoFleteService>();
+builder.Services.AddScoped<IUsuarioService, UserService>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
