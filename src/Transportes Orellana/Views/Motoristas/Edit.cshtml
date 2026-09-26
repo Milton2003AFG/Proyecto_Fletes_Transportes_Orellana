@@ -1,0 +1,102 @@
+@model Transportes_Orellana.Models.Motorista
+
+@{
+    ViewData["Title"] = "Editar Motorista";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-pencil-square me-2"></i>
+                        Editar Motorista
+                    </h5>
+                </div>
+
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="FechaRegistro" />
+                        <input type="hidden" asp-for="UsuarioId" />
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger py-2 small"></div>
+
+                        <h6 class="text-primary fw-bold text-uppercase small border-bottom pb-2 mb-3">
+                            Datos Personales
+                        </h6>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="Nombre" class="form-label fw-semibold"></label>
+                                <input asp-for="Nombre" class="form-control" />
+                                <span asp-validation-for="Nombre" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Apellido" class="form-label fw-semibold"></label>
+                                <input asp-for="Apellido" class="form-control" />
+                                <span asp-validation-for="Apellido" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Telefono" class="form-label fw-semibold"></label>
+                                <input asp-for="Telefono" class="form-control" />
+                                <span asp-validation-for="Telefono" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Direccion" class="form-label fw-semibold"></label>
+                                <input asp-for="Direccion" class="form-control" />
+                                <span asp-validation-for="Direccion" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <h6 class="text-primary fw-bold text-uppercase small border-bottom pb-2 mb-3">
+                            Contacto y Documentación
+                        </h6>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="Correo" class="form-label fw-semibold"></label>
+                                <input asp-for="Correo" class="form-control" />
+                                <span asp-validation-for="Correo" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="PerfilSocial" class="form-label fw-semibold"></label>
+                                <input asp-for="PerfilSocial" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Curriculum" class="form-label fw-semibold"></label>
+                                <input asp-for="Curriculum" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
+
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="bi bi-check-lg me-1"></i>
+                                Guardar cambios
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
