@@ -9,6 +9,7 @@
         <div class="col-lg-10">
             <div class="card shadow-sm border-0">
 
+                <!-- Encabezado -->
                 <div class="card-header bg-primary text-white py-3">
                     <h5 class="mb-0 fw-bold">
                         <i class="bi bi-pencil-square me-2"></i>
@@ -17,9 +18,12 @@
                 </div>
 
                 <div class="card-body p-4">
+
+                    <!-- Formulario de edición -->
                     <form asp-action="Edit" method="post">
                         @Html.AntiForgeryToken()
 
+                        <!-- Datos que no se editan -->
                         <input type="hidden" asp-for="Id" />
                         <input type="hidden" asp-for="FechaRegistro" />
                         <input type="hidden" asp-for="UsuarioId" />
@@ -27,6 +31,7 @@
                         <div asp-validation-summary="ModelOnly"
                              class="alert alert-danger py-2 small"></div>
 
+                        <!-- Datos personales -->
                         <h6 class="text-primary fw-bold text-uppercase small border-bottom pb-2 mb-3">
                             Datos Personales
                         </h6>
@@ -57,6 +62,7 @@
                             </div>
                         </div>
 
+                        <!-- Contacto y documentación -->
                         <h6 class="text-primary fw-bold text-uppercase small border-bottom pb-2 mb-3">
                             Contacto y Documentación
                         </h6>
@@ -79,6 +85,7 @@
                             </div>
                         </div>
 
+                        <!-- Acciones -->
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-action="Index" class="btn btn-outline-secondary">
                                 Cancelar
@@ -90,8 +97,8 @@
                             </button>
                         </div>
                     </form>
-                </div>
 
+                </div>
             </div>
         </div>
     </div>
