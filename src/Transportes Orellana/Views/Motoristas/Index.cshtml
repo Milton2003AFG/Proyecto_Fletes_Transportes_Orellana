@@ -1,0 +1,132 @@
+@model IEnumerable<Transportes_Orellana.Models.Motorista>
+
+@{
+    ViewData["Title"] = "Motoristas";
+}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Motoristas</h2>
+            <p class="text-muted mb-0">Gestión de motoristas registrados.</p>
+        </div>
+
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Nuevo motorista
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+
+            <div class="mb-3">
+                <input type="text"
+                       id="buscarMotorista"
+                       class="form-control"
+                       placeholder="Buscar motorista..." />
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info mb-0">
+                    No hay motoristas registrados.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table align-middle" id="tablaMotoristas">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>Teléfono</th>
+                                <th>Estado</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var motorista in Model)
+                            {
+                                <tr>
+                                    <td>@motorista.Nombre @motorista.Apellido</td>
+                                    <td>@motorista.Correo</td>
+                                    <td>@motorista.Telefono</td>
+
+                                    <td>
+                                        @if (motorista.Estado == "activo")
+                                        {
+                                            <span class="badge bg-success">Activo</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Inactivo</span>
+                                        }
+                                    </td>
+
+                                    <td class="text-center">
+                                        <a asp-action="Details"
+                                           asp-route-id="@motorista.Id"
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@motorista.Id"
+                                           class="btn btn-sm btn-outline-warning">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+
+                                        @if (motorista.Estado == "activo")
+                                        {
+                                            <a asp-action="Delete"
+                                               asp-route-id="@motorista.Id"
+                                               class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-person-x"></i>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Activate"
+                                               asp-route-id="@motorista.Id"
+                                               class="btn btn-sm btn-outline-success">
+                                                <i class="bi bi-person-check"></i>
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById("buscarMotorista")?.addEventListener("keyup", function () {
+            const filtro = this.value.toLowerCase();
+
+            document.querySelectorAll("#tablaMotoristas tbody tr")
+                .forEach(fila => {
+                    fila.style.display =
+                        fila.innerText.toLowerCase().includes(filtro)
+                            ? ""
+                            : "none";
+                });
+        });
+    </script>
+}

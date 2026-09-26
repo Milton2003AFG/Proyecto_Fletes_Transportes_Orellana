@@ -1,0 +1,119 @@
+@model Transportes_Orellana.Models.Motorista
+
+@{
+    ViewData["Title"] = "Detalle del Motorista";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-person-badge-fill me-2"></i>
+                        Detalle del Motorista
+                    </h5>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <h6 class="text-primary fw-bold text-uppercase small border-bottom pb-2 mb-3">
+                        Datos Personales
+                    </h6>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <small class="text-muted">Nombre completo</small>
+                            <div class="fw-semibold">@Model.Nombre @Model.Apellido</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <small class="text-muted">Teléfono</small>
+                            <div>@Model.Telefono</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <small class="text-muted">Correo</small>
+                            <div>@Model.Correo</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <small class="text-muted">Dirección</small>
+                            <div>@Model.Direccion</div>
+                        </div>
+                    </div>
+
+                    <h6 class="text-primary fw-bold text-uppercase small border-bottom pb-2 mb-3">
+                        Documentación y Redes
+                    </h6>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <small class="text-muted">Perfil social</small>
+                            <div>
+                                @if (!string.IsNullOrWhiteSpace(Model.PerfilSocial))
+                                {
+                                    <a href="@Model.PerfilSocial" target="_blank">
+                                        @Model.PerfilSocial
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No registrado</span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <small class="text-muted">Currículum</small>
+                            <div>
+                                @if (!string.IsNullOrWhiteSpace(Model.Curriculum))
+                                {
+                                    <a href="@Model.Curriculum" target="_blank">
+                                        Ver currículum
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No registrado</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <h6 class="text-primary fw-bold text-uppercase small border-bottom pb-2 mb-3">
+                        Estado
+                    </h6>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <small class="text-muted">Estado actual</small>
+                            <div>
+                                <span class="badge @(Model.Estado == "activo" ? "bg-success" : "bg-secondary")">
+                                    @(Model.Estado == "activo" ? "Activo" : "Inactivo")
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <small class="text-muted">Fecha de registro</small>
+                            <div>@Model.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
+
+                        <a asp-action="Edit"
+                           asp-route-id="@Model.Id"
+                           class="btn btn-primary">
+                            <i class="bi bi-pencil me-1"></i> Editar
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
