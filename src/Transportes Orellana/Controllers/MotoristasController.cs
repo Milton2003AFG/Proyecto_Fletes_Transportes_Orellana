@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Transportes_Orellana.Models;
 using Transportes_Orellana.Models.ViewModels;
-using Transportes_Orellana.Services.Implementations;
 using Transportes_Orellana.Services.Interfaces;
 
 namespace Transportes_Orellana.Controllers;
@@ -12,33 +11,111 @@ public class MotoristasController : Controller
 {
     private readonly IMotoristaService _motoristaService;
 
-    public MotoristasController(IMotoristaService motoristaService){
+    public MotoristasController(IMotoristaService motoristaService)
+    {
         _motoristaService = motoristaService;
     }
 
-    [HttpGet]
-    public IActionResult Create()
+    public async Task<IActionResult> Index()
+        => View(await _motoristaService.ObtenerTodosAsync());
+
+    public async Task<IActionResult> Details(int? id)
     {
-        return View(new RegistrarMotoristaViewModel());
+        if (id == null) return NotFound();
+
+        var motorista = await _motoristaService.ObtenerPorIdAsync(id.Value);
+        return motorista == null ? NotFound() : View(motorista);
+    }
+
+    [HttpGet]
+    public IActionResult Create() => View(new RegistrarMotoristaViewModel());
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(RegistrarMotoristaViewModel model)
+    {
+        if (!ModelState.IsValid) return View(model);
+
+        var (exito, error) = await _motoristaService.RegistrarMotoristaAsync(model);
+
+        if (!exito)
+        {
+            ModelState.AddModelError(string.Empty, error ?? "Error al registrar el motorista.");
+            return View(model);
+        }
+
+        TempData["SuccessMessage"] = "Motorista registrado correctamente.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null) return NotFound();
+
+        var motorista = await _motoristaService.ObtenerPorIdAsync(id.Value);
+        return motorista == null ? NotFound() : View(motorista);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult>Create(RegistrarMotoristaViewModel model)
+    public async Task<IActionResult> Edit(int id, Motorista motorista)
     {
-        if (!ModelState.IsValid)
-        {
-            return View(model);
-        }
+        if (id != motorista.Id) return NotFound();
 
-        var (exito, error) = await _motoristaService.RegistrarMotoristaAsync(model);
+        ModelState.Remove(nameof(motorista.FechaRegistro));
+
+        if (!ModelState.IsValid) return View(motorista);
+
+        var (exito, error) = await _motoristaService.ActualizarAsync(motorista);
+
         if (!exito)
         {
-            ModelState.AddModelError(string.Empty, error ?? "Error al procesar el registro");
-            return View(model);
+            ModelState.AddModelError(string.Empty, error ?? "Error al actualizar el motorista.");
+            return View(motorista);
         }
-        TempData["SuccessMessage"] = $"Motorista {model.Nombre} {model.Apellido} registrado exitosamente";
-        return RedirectToAction("Index");
+
+        TempData["SuccessMessage"] = "Motorista actualizado correctamente.";
+        return RedirectToAction(nameof(Index));
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null) return NotFound();
+
+        var motorista = await _motoristaService.ObtenerPorIdAsync(id.Value);
+        return motorista == null ? NotFound() : View(motorista);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        if (!await _motoristaService.CambiarEstadoAsync(id, "inactivo"))
+            return NotFound();
+
+        TempData["SuccessMessage"] = "Motorista eliminado correctamente.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Activate(int? id)
+    {
+        if (id == null) return NotFound();
+
+        var motorista = await _motoristaService.ObtenerPorIdAsync(id.Value);
+        return motorista == null ? NotFound() : View(motorista);
+    }
+
+    [HttpPost, ActionName("Activate")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ActivateConfirmed(int id)
+    {
+        if (!await _motoristaService.CambiarEstadoAsync(id, "activo"))
+            return NotFound();
+
+        TempData["SuccessMessage"] = "Motorista agregado correctamente.";
+        return RedirectToAction(nameof(Index));
+    }
 }
