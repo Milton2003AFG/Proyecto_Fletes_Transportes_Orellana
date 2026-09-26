@@ -9,6 +9,7 @@
         <div class="col-lg-10">
             <div class="card shadow-sm border-0">
 
+                <!-- Encabezado -->
                 <div class="card-header bg-primary text-white py-3">
                     <h5 class="mb-0 fw-bold">
                         <i class="bi bi-person-badge-fill me-2"></i>
@@ -18,6 +19,7 @@
 
                 <div class="card-body p-4">
 
+                    <!-- Datos personales -->
                     <h6 class="text-primary fw-bold text-uppercase small border-bottom pb-2 mb-3">
                         Datos Personales
                     </h6>
@@ -44,6 +46,7 @@
                         </div>
                     </div>
 
+                    <!-- Documentación -->
                     <h6 class="text-primary fw-bold text-uppercase small border-bottom pb-2 mb-3">
                         Documentación y Redes
                     </h6>
@@ -82,6 +85,7 @@
                         </div>
                     </div>
 
+                    <!-- Estado y registro -->
                     <h6 class="text-primary fw-bold text-uppercase small border-bottom pb-2 mb-3">
                         Estado
                     </h6>
@@ -102,8 +106,11 @@
                         </div>
                     </div>
 
+                    <!-- Acciones -->
                     <div class="d-flex justify-content-end gap-2">
-                        <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            Volver
+                        </a>
 
                         <a asp-action="Edit"
                            asp-route-id="@Model.Id"
