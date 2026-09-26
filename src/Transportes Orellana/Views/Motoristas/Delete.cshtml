@@ -1,0 +1,54 @@
+@model Transportes_Orellana.Models.Motorista
+
+@{
+    ViewData["Title"] = "Desactivar Motorista";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+
+                <!-- Encabezado -->
+                <div class="card-header bg-danger text-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-person-x-fill me-2"></i>
+                        Desactivar Motorista
+                    </h5>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <!-- Confirmación -->
+                    <div class="alert alert-warning">
+                        ¿Seguro que deseas desactivar este motorista?
+                    </div>
+
+                    <!-- Datos principales -->
+                    <p><strong>Nombre:</strong> @Model.Nombre @Model.Apellido</p>
+                    <p><strong>Correo:</strong> @Model.Correo</p>
+                    <p><strong>Teléfono:</strong> @Model.Telefono</p>
+
+                    <!-- Formulario de desactivación -->
+                    <form asp-action="Delete" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
+
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-person-x me-1"></i>
+                                Desactivar
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
