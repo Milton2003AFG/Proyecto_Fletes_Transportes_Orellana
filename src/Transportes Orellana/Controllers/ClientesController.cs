@@ -17,9 +17,10 @@ public class ClientesController : Controller
     }
 
     // Permitido para Admin y Motorista
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string? estado)
     {
-        var clientes = await _clienteService.ObtenerTodosAsync();
+        var clientes = await _clienteService.ObtenerTodosAsync(estado);
+        ViewBag.EstadoActual = estado;
         return View(clientes);
     }
 

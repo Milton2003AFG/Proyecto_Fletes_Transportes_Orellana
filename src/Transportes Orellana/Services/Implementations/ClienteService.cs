@@ -14,11 +14,17 @@ public class ClienteService : IClienteService
         _context = context;
     }
 
-    public async Task<IEnumerable<Cliente>> ObtenerTodosAsync()
+    public async Task<IEnumerable<Cliente>> ObtenerTodosAsync(string? estado)
     {
-        return await _context.Clientes
-            .OrderByDescending(c => c.FechaRegistro)
+        var clientes = await _context.Clientes
             .ToListAsync();
+
+        if (!string.IsNullOrWhiteSpace(estado))
+        {
+            clientes = clientes.Where(c => c.Estado == estado).ToList();
+        }
+        
+        return clientes;
     }
 
     public async Task<Cliente?> ObtenerPorIdAsync(int id)

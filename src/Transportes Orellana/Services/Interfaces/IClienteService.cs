@@ -4,7 +4,7 @@ namespace Transportes_Orellana.Services.Interfaces;
 
 public interface IClienteService
 {
-    Task<IEnumerable<Cliente>> ObtenerTodosAsync();
+    Task<IEnumerable<Cliente>> ObtenerTodosAsync(string? estado);
     Task<Cliente?> ObtenerPorIdAsync(int id);
     Task<(bool Exito, string? Error)> CrearAsync(Cliente cliente);
     Task<(bool Exito, string? Error)> ActualizarAsync(Cliente cliente);

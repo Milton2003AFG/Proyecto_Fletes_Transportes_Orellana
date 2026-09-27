@@ -19,14 +19,21 @@ namespace Transportes_Orellana.Controllers
 
         // GET: /Viajes/Index
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? estado)
         {
-            var listaViajes = await _context.Fletes
+            var lista = _context.Fletes
                 .Include(v => v.Cliente)
                 .Include(v => v.Unidad)
                 .Include(v => v.Motorista)
-                .ToListAsync();
+                .AsQueryable();
 
+            if (!string.IsNullOrWhiteSpace(estado))
+            {
+                lista = lista.Where(v => v.Estado == estado);
+            }
+
+            var listaViajes = await lista.ToListAsync();
+            ViewBag.EstadoActual = estado;
             return View(listaViajes);
         }
 
