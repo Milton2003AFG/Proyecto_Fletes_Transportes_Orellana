@@ -38,14 +38,14 @@
             <table class="table table-hover align-middle mb-0" id="tablaViajes">
                 <thead class="text-secondary small fw-bold">
                     <tr>
-                        <th class="border-0 ps-0">ID</th>
+                        <th class="border-0 ps-0" style="width: 50px;">ID</th>
                         <th class="border-0">Cliente</th>
                         <th class="border-0">Carga (Origen)</th>
                         <th class="border-0">Descarga (Destino)</th>
-                        <th class="border-0">Fecha y Hora Salida</th>
-                        <th class="border-0">Camión</th>
+                        <th class="border-0 text-nowrap">Fecha y Hora Salida</th>
+                        <th class="border-0 text-nowrap">Camión</th>
                         <th class="border-0">Estado</th>
-                        <th class="border-0 text-center pe-0">Acciones</th>
+                        <th class="border-0 text-center pe-0 text-nowrap" style="width: 110px;">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="border-top-0">
@@ -56,8 +56,8 @@
                             <td class="text-muted">@(viaje.Cliente != null ? viaje.Cliente.Nombre : "Sin cliente")</td>
                             <td class="text-muted">@viaje.LugarRecolecta</td>
                             <td class="text-muted">@viaje.LugarEntrega</td>
-                            <td class="text-muted">@viaje.HoraSalida.ToString("dd/MM/yyyy HH:mm")</td>
-                            <td class="text-muted">@(viaje.Unidad != null ? viaje.Unidad.Placa : "Sin asignar")</td>
+                            <td class="text-muted text-nowrap">@viaje.HoraSalida.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="text-muted text-nowrap">@(viaje.Unidad != null ? viaje.Unidad.Placa : "Sin asignar")</td>
                             <td>
                                 @if (viaje.Estado?.ToLower() == "en_proceso" || viaje.Estado?.ToLower() == "programado")
                                 {
@@ -68,7 +68,7 @@
                                     <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1 rounded-pill">@viaje.Estado</span>
                                 }
                             </td>
-                            <td class="text-center pe-0">
+                            <td class="text-center pe-0 text-nowrap">
                                 <a asp-action="Details" asp-route-id="@viaje.Id" class="btn btn-sm text-secondary p-1" title="Ver detalles">
                                     <i class="bi bi-eye"></i>
                                 </a>

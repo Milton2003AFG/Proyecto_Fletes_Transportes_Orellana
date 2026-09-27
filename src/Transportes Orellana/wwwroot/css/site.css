@@ -12,13 +12,10 @@ html {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
-  position: relative;
+html, body {
   min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
+  margin: 0;
+  padding: 0;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -28,4 +25,173 @@ body {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
+}
+
+/* ===================================================
+   ESTILOS DEL DASHBOARD / LAYOUT
+   =================================================== */
+:root {
+  --sidebar-bg: #0b1a30;
+  --sidebar-hover: #152642;
+  --primary-blue: #0d6efd;
+  --bg-light: #f4f7fb;
+  --text-muted-custom: #8a99ad;
+}
+
+body {
+  background-color: var(--bg-light);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Layout wrapper */
+.app-wrapper {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Sidebar lateral */
+.app-sidebar {
+  width: 250px;
+  background-color: var(--sidebar-bg);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-brand {
+  padding: 1.5rem 1.25rem 1.25rem;
+  text-decoration: none;
+  color: #ffffff;
+  display: block;
+}
+
+.sidebar-brand-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0 0.75rem;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.sidebar-menu .nav-item {
+  margin-bottom: 0.3rem;
+}
+
+.sidebar-menu .nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0.65rem 0.95rem;
+  color: #d1d9e6;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.sidebar-menu .nav-link i {
+  font-size: 1.15rem;
+  margin-right: 0.85rem;
+  width: 20px;
+  text-align: center;
+}
+
+.sidebar-menu .nav-link:hover {
+  background-color: var(--sidebar-hover);
+  color: #ffffff;
+}
+
+.sidebar-menu .nav-link.active {
+  background-color: var(--primary-blue);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+}
+
+/* Área de contenido */
+.app-main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  background-color: var(--bg-light);
+}
+
+/* Header superior */
+.app-header {
+  background-color: #ffffff;
+  height: 65px;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5eaef;
+}
+
+.header-date {
+  display: flex;
+  align-items: center;
+  color: #6c757d;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.app-content {
+  padding: 2rem;
+  flex-grow: 1;
+}
+
+/* Backdrop para móviles */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 1040;
+}
+
+.sidebar-overlay.active {
+  display: block;
+}
+
+/* Responsive (< 992px) */
+@media (max-width: 991.98px) {
+  .app-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 1050;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
+  }
+
+  .app-sidebar.show {
+    transform: translateX(0);
+  }
+
+  .app-header {
+    padding: 0 1rem;
+  }
+
+  .app-content {
+    padding: 1.25rem;
+  }
 }
