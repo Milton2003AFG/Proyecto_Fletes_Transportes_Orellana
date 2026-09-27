@@ -7,4 +7,5 @@ public class UsuarioConfiguracionViewModel
     public string? Telefono { get; set; }
     public string Rol { get; set; } = string.Empty;
     public bool EmailConfirmado { get; set; }
+    public bool EstaBloqueado {get; set;}
 }

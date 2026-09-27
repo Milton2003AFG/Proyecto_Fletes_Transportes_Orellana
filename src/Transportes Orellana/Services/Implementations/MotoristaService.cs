@@ -104,6 +104,13 @@ public class MotoristaService : IMotoristaService
         motorista.Estado = nuevoEstado;
         await _context.SaveChangesAsync();
 
+        if (!string.IsNullOrEmpty(motorista.UsuarioId))
+        {
+            bool bloquear = nuevoEstado.Equals("inactivo", StringComparison.OrdinalIgnoreCase);
+            var(exito, error) = await _usuarioService.CambiarEstadoUsuarioAsync(motorista.UsuarioId, bloquear);
+
+            if (!exito) return false;
+        }
         return true;
     }
 }

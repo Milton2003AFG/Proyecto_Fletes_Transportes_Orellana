@@ -7,4 +7,6 @@ public interface IUsuarioService
         string password,
         string rol,
         string? telefono = null);
+
+    Task<(bool Exito, string? Error)>CambiarEstadoUsuarioAsync(string usuarioId, bool bloquear);
 }
