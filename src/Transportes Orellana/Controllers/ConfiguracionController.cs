@@ -28,13 +28,16 @@ public class ConfiguracionController : Controller
         foreach(var u in usuariosIdentity)
         {
             var roles = await _userManager.GetRolesAsync(u);
+            var estaBloqueado = u.LockoutEnd.HasValue && u.LockoutEnd.Value > DateTimeOffset.UtcNow;
+
             listaUsuarios.Add(new UsuarioConfiguracionViewModel
             {
                 Id = u.Id,
                 Email = u.Email ?? u.UserName ?? "Sin correo",
                 Telefono = u.PhoneNumber ?? "No registrado",
                 Rol = roles.FirstOrDefault() ?? "Sin rol",
-                EmailConfirmado = u.EmailConfirmed
+                EmailConfirmado = u.EmailConfirmed,
+                EstaBloqueado = estaBloqueado
             });
         }
         return View(listaUsuarios);
@@ -70,6 +73,32 @@ public class ConfiguracionController : Controller
         }
 
         TempData["SuccessMessage"] = $"El administrador '{model.Email}' fue registrado exitosamente";
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CambiarEstado(string id, bool bloquear)
+    {
+        var usuarioActualId = _userManager.GetUserId(User);
+        if(id == usuarioActualId && bloquear)
+        {
+            TempData["ErrorMessage"] = "No puedes suspender tu propia cuenta de administrador";
+            return RedirectToAction(nameof(Index));
+        }
+
+        var (exito, error) = await _usuarioService.CambiarEstadoUsuarioAsync(id, bloquear);
+        if (!exito)
+        {
+            TempData["ErrorMessage"] = error;
+        }
+        else
+        {
+            TempData["SuccessMessage"] = bloquear
+                ? "Acceso del usuario suspendido correctamente"
+                : "Usuario reactivado con éxito";
+        }
+
         return RedirectToAction(nameof(Index));
     }
 }

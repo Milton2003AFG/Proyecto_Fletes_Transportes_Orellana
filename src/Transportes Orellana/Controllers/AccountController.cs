@@ -46,8 +46,14 @@ public class AccountController : Controller
             model.Email,
             model.Password,
             model.RememberMe,
-            lockoutOnFailure: false
+            lockoutOnFailure: true
         );
+
+        if (result.IsLockedOut)
+        {
+            ModelState.AddModelError(string.Empty, "Esta cuenta ha sido desactivada por el administrador.");
+            return View(model);
+        }
 
         if (result.Succeeded)
         {
