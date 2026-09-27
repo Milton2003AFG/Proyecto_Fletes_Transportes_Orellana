@@ -32,7 +32,8 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm">
                 <div class="card-body d-flex align-items-center">
-                    <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3 text-primary">
+                    <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3 text-primary d-inline-flex align-items-center justify-content-center" 
+                    style="width: 60px; height: 60px;">
                         <i class="bi bi-people-fill fs-3"></i>
                     </div>
                     <div>
@@ -45,7 +46,8 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm">
                 <div class="card-body d-flex align-items-center">
-                    <div class="rounded-circle bg-dark bg-opacity-10 p-3 me-3 text-dark">
+                    <div class="rounded-circle bg-dark bg-opacity-10 p-3 me-3 text-dark d-inline-flex align-items-center justify-content-center" 
+                    style="width: 60px; height: 60px;">
                         <i class="bi bi-shield-lock-fill fs-3"></i>
                     </div>
                     <div>
@@ -58,7 +60,8 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm">
                 <div class="card-body d-flex align-items-center">
-                    <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3 text-success">
+                    <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3 text-success d-inline-flex align-items-center justify-content-center" 
+                    style="width: 60px; height: 60px;">
                         <i class="bi bi-truck fs-3"></i>
                     </div>
                     <div>
@@ -69,6 +72,15 @@
             </div>
         </div>
     </div>
+
+    <!-- Alerta de error si intenta suspender su propia cuenta -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-exclamation-octagon-fill me-2"></i>@TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 
     <!-- Tabla de Cuentas de Acceso -->
     <div class="card border-0 shadow-sm">
@@ -85,62 +97,67 @@
                             <th>Correo / Usuario</th>
                             <th>Rol</th>
                             <th>Teléfono</th>
-                            <th>Estado Cuenta</th>
+                            <th>Estado</th>
+                            <th class="text-end">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if (!Model.Any())
+                        @foreach (var user in Model)
                         {
                             <tr>
-                                <td colspan="4" class="text-center text-muted py-4">
-                                    No hay usuarios registrados en el sistema.
+                                <td>
+                                    <div class="fw-semibold text-dark">@user.Email</div>
+                                    <small class="text-muted font-monospace">ID: @user.Id</small>
+                                </td>
+                                <td>
+                                    @if (user.Rol == "Admin")
+                                    {
+                                        <span class="badge bg-dark"><i class="bi bi-shield-shaded me-1"></i>Admin</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-primary"><i class="bi bi-truck me-1"></i>Motorista</span>
+                                    }
+                                </td>
+                                <td>@user.Telefono</td>
+                                <td>
+                                    @if (user.EstaBloqueado)
+                                    {
+                                        <span class="badge bg-danger-subtle text-danger">
+                                            <i class="bi bi-x-circle me-1"></i>Inactivo / Suspendido
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success-subtle text-success">
+                                            <i class="bi bi-check-circle me-1"></i>Activo
+                                        </span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <form asp-action="CambiarEstado" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@user.Id" />
+                                        @if (user.EstaBloqueado)
+                                        {
+                                            <input type="hidden" name="bloquear" value="false" />
+                                            <button type="submit" class="btn btn-outline-success btn-sm rounded-pill px-3" 
+                                                    title="Permitir inicio de sesión">
+                                                <i class="bi bi-unlock-fill me-1"></i> Reactivar
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <input type="hidden" name="bloquear" value="true" />
+                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3" 
+                                                    onclick="return confirm('¿Está seguro de suspender el acceso a este usuario?')"
+                                                    title="Impedir inicio de sesión">
+                                                <i class="bi bi-lock-fill me-1"></i> Desactivar
+                                            </button>
+                                        }
+                                    </form>
                                 </td>
                             </tr>
-                        }
-                        else
-                        {
-                            @foreach (var user in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        <div class="fw-semibold text-dark">@user.Email</div>
-                                        <small class="text-muted font-monospace">ID: @user.Id</small>
-                                    </td>
-                                    <td>
-                                        @if (user.Rol == "Admin")
-                                        {
-                                            <span class="badge bg-dark">
-                                                <i class="bi bi-shield-shaded me-1"></i>Admin
-                                            </span>
-                                        }
-                                        else if (user.Rol == "Motorista")
-                                        {
-                                            <span class="badge bg-primary">
-                                                <i class="bi bi-truck me-1"></i>Motorista
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-secondary">@user.Rol</span>
-                                        }
-                                    </td>
-                                    <td>@user.Telefono</td>
-                                    <td>
-                                        @if (user.EmailConfirmado)
-                                        {
-                                            <span class="badge bg-success-subtle text-success">
-                                                <i class="bi bi-check-circle me-1"></i>Activo
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-warning-subtle text-warning">
-                                                <i class="bi bi-clock-history me-1"></i>Pendiente
-                                            </span>
-                                        }
-                                    </td>
-                                </tr>
-                            }
                         }
                     </tbody>
                 </table>
