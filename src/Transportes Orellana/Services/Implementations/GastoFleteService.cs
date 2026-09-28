@@ -74,9 +74,12 @@ public class GastoFleteService : IGastoFleteService
             return(false, "El flete no existe");
         }
 
-        if(!string.Equals(flete.Estado, "terminado", StringComparison.OrdinalIgnoreCase))
+        bool esEstadoValidoParaGastos = string.Equals(flete.Estado, "terminado", StringComparison.OrdinalIgnoreCase) ||
+                               string.Equals(flete.Estado, "con_queja", StringComparison.OrdinalIgnoreCase);
+
+        if (!esEstadoValidoParaGastos)
         {
-            return(false, "Solo se pueden registrar gastos en fletes que estén terminados.");
+            return (false, "Solo se pueden registrar gastos en fletes que estén terminados o con queja.");
         }
 
         gasto.TipoGasto = gasto.TipoGasto.Trim().ToLowerInvariant();
