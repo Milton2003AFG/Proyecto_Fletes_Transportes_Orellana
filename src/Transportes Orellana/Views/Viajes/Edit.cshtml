@@ -60,9 +60,16 @@
                         <span asp-validation-for="LugarEntrega" class="text-danger small"></span>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label text-muted small fw-bold">Ruta / Consideraciones:</label>
-                        <textarea asp-for="Consideraciones" class="form-control bg-light border-0" rows="3" placeholder="Ej. Via CA-1, frontera El Poy"></textarea>
+                     <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Estado:</label>
+                        <select asp-for="Estado" class="form-select bg-light border-0 py-2">
+                            <option value="programado">Programado</option>
+                            <option value="en_proceso">En Proceso</option>
+                            <option value="terminado">Terminado</option>
+                            <option value="con_devolucion">Con Devolución</option>
+                            <option value="con_queja">Con Queja</option>
+                        </select>
+                        <span asp-validation-for="Estado" class="text-danger small"></span>
                     </div>
                 </div>
 
@@ -89,16 +96,10 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label text-muted small fw-bold">Estado:</label>
-                        <select asp-for="Estado" class="form-select bg-light border-0 py-2">
-                            <option value="programado">Programado</option>
-                            <option value="en_proceso">En Proceso</option>
-                            <option value="terminado">Terminado</option>
-                            <option value="con_devolucion">Con Devolución</option>
-                            <option value="con_queja">Con Queja</option>
-                        </select>
-                        <span asp-validation-for="Estado" class="text-danger small"></span>
+                        <label class="form-label text-muted small fw-bold">Ruta / Consideraciones:</label>
+                        <textarea asp-for="Consideraciones" class="form-control bg-light border-0" rows="3" placeholder="Ej. Via CA-1, frontera El Poy"></textarea>
                     </div>
+
                 </div>
             </div>
 

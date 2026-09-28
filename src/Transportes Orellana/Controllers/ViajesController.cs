@@ -74,39 +74,59 @@ namespace Transportes_Orellana.Controllers
             ModelState.Remove("Motorista");
             ModelState.Remove("Gastos");
 
-            // 1. Validar que la hora de destino sea estrictamente mayor a la hora de salida
+            // 1. Validar fechas lógicas
+            if (viaje.HoraSalida < DateTime.Now.AddMinutes(-30))
+            {
+                ModelState.AddModelError("HoraSalida", "La fecha de salida no puede ser anterior a la actual.");
+            }
+
             if (viaje.HoraDestino <= viaje.HoraSalida)
             {
                 ModelState.AddModelError("HoraDestino", "La hora de destino debe ser posterior a la hora de salida.");
             }
 
-            // 2. Validar que el monto sea válido
             if (viaje.MontoCobro <= 0)
             {
                 ModelState.AddModelError("MontoCobro", "El monto de cobro debe ser mayor a 0.");
             }
 
+            // 2. Validar que Cliente, Camión y Motorista existan y estén activos
+            var cliente = await _context.Clientes.FindAsync(viaje.ClienteId);
+            if (cliente == null || string.IsNullOrWhiteSpace(cliente.Estado) || !cliente.Estado.Trim().Equals("activo", StringComparison.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError("ClienteId", "El cliente seleccionado no existe o no está activo.");
+            }
+
+            var unidad = await _context.UnidadesTransporte.FindAsync(viaje.UnidadId);
+            if (unidad == null || string.IsNullOrWhiteSpace(unidad.Estado) || !unidad.Estado.Trim().Equals("activo", StringComparison.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError("UnidadId", "La unidad de transporte no existe o no está activa.");
+            }
+
+            var motorista = await _context.Motoristas.FindAsync(viaje.MotoristaId);
+            if (motorista == null || string.IsNullOrWhiteSpace(motorista.Estado) || !motorista.Estado.Trim().Equals("activo", StringComparison.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError("MotoristaId", "El motorista no existe o no está activo.");
+            }
+
             // 3. Validación de solapamiento
             var estadosQueBloquean = new[] { "programado", "en_proceso", "con_devolucion" };
 
-            var viajesActivos = await _context.Fletes
+            var solapamiento = await _context.Fletes
                 .Where(f => f.Estado != null && estadosQueBloquean.Contains(f.Estado.ToLower()))
-                .ToListAsync();
-
-            var solapamiento = viajesActivos.FirstOrDefault(f =>
-                (f.MotoristaId == viaje.MotoristaId || f.UnidadId == viaje.UnidadId) &&
-                (viaje.HoraSalida < f.HoraDestino && viaje.HoraDestino > f.HoraSalida)
-            );
+                .Where(f => (f.MotoristaId == viaje.MotoristaId || f.UnidadId == viaje.UnidadId) &&
+                            viaje.HoraSalida < f.HoraDestino && viaje.HoraDestino > f.HoraSalida)
+                .FirstOrDefaultAsync();
 
             if (solapamiento != null)
             {
                 if (solapamiento.MotoristaId == viaje.MotoristaId)
                 {
-                    ModelState.AddModelError("MotoristaId", $"El motorista ya tiene asignado el viaje #{solapamiento.Id} en ese rango de tiempo ({solapamiento.HoraSalida:dd/MM/yyyy HH:mm} - {solapamiento.HoraDestino:dd/MM/yyyy HH:mm}).");
+                    ModelState.AddModelError("MotoristaId", $"El motorista ya tiene asignado el viaje #{solapamiento.Id} en ese rango ({solapamiento.HoraSalida:dd/MM/yyyy HH:mm} - {solapamiento.HoraDestino:dd/MM/yyyy HH:mm}).");
                 }
                 if (solapamiento.UnidadId == viaje.UnidadId)
                 {
-                    ModelState.AddModelError("UnidadId", $"El camión ya está asignado al viaje #{solapamiento.Id} en ese rango de tiempo ({solapamiento.HoraSalida:dd/MM/yyyy HH:mm} - {solapamiento.HoraDestino:dd/MM/yyyy HH:mm}).");
+                    ModelState.AddModelError("UnidadId", $"El camión ya está asignado al viaje #{solapamiento.Id} en ese rango ({solapamiento.HoraSalida:dd/MM/yyyy HH:mm} - {solapamiento.HoraDestino:dd/MM/yyyy HH:mm}).");
                 }
             }
 
@@ -116,6 +136,16 @@ namespace Transportes_Orellana.Controllers
                 {
                     _context.Fletes.Add(viaje);
                     await _context.SaveChangesAsync();
+
+                    bool esFinalizado = !string.IsNullOrEmpty(viaje.Estado) &&
+                        (viaje.Estado.Equals("terminado", StringComparison.OrdinalIgnoreCase) ||
+                        viaje.Estado.Equals("con_queja", StringComparison.OrdinalIgnoreCase));
+
+                    if (esFinalizado)
+                    {
+                        return RedirectToAction("Create", "GastosFlete", new { fleteId = viaje.Id });
+                    }
+
                     TempData["Exito"] = "¡Viaje registrado correctamente!";
                     return RedirectToAction(nameof(Index));
                 }
@@ -126,7 +156,6 @@ namespace Transportes_Orellana.Controllers
                 }
             }
 
-            // Si hay un error, recargamos las listas pasando el objeto para que no se pierda la selección del usuario
             await CargarListasDesplegablesAsync(viaje);
             return View(viaje);
         }
@@ -168,17 +197,24 @@ namespace Transportes_Orellana.Controllers
                 ModelState.AddModelError("MontoCobro", "El monto de cobro debe ser mayor a 0.");
             }
 
-            // Solapamiento en edición (excluyendo el viaje actual)
+            // 1. Validar finalización anticipada
+            bool esFinalizado = !string.IsNullOrEmpty(viaje.Estado) &&
+                (viaje.Estado.Equals("terminado", StringComparison.OrdinalIgnoreCase) ||
+                viaje.Estado.Equals("con_queja", StringComparison.OrdinalIgnoreCase));
+
+            if (esFinalizado && viaje.HoraDestino > DateTime.Now)
+            {
+                ModelState.AddModelError("HoraDestino", "Un viaje terminado o con queja no puede tener una hora de llegada en el futuro.");
+            }
+
+            // 2. Solapamiento en edición
             var estadosQueBloquean = new[] { "programado", "en_proceso", "con_devolucion" };
 
-            var viajesActivos = await _context.Fletes
+            var solapamiento = await _context.Fletes
                 .Where(f => f.Id != viaje.Id && f.Estado != null && estadosQueBloquean.Contains(f.Estado.ToLower()))
-                .ToListAsync();
-
-            var solapamiento = viajesActivos.FirstOrDefault(f =>
-                (f.MotoristaId == viaje.MotoristaId || f.UnidadId == viaje.UnidadId) &&
-                (viaje.HoraSalida < f.HoraDestino && viaje.HoraDestino > f.HoraSalida)
-            );
+                .Where(f => (f.MotoristaId == viaje.MotoristaId || f.UnidadId == viaje.UnidadId) &&
+                            viaje.HoraSalida < f.HoraDestino && viaje.HoraDestino > f.HoraSalida)
+                .FirstOrDefaultAsync();
 
             if (solapamiento != null)
             {
@@ -198,14 +234,20 @@ namespace Transportes_Orellana.Controllers
                 {
                     _context.Update(viaje);
                     await _context.SaveChangesAsync();
+
+                    if (esFinalizado)
+                    {
+                        return RedirectToAction("Create", "GastosFlete", new { fleteId = viaje.Id });
+                    }
+
                     TempData["Exito"] = "Viaje actualizado correctamente.";
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!FleteExists(viaje.Id)) return NotFound();
                     else throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
 
             await CargarListasDesplegablesAsync(viaje);
@@ -252,11 +294,29 @@ namespace Transportes_Orellana.Controllers
             return _context.Fletes.Any(e => e.Id == id);
         }
 
+        // Solo cargar registros activos en los selects
         private async Task CargarListasDesplegablesAsync(Flete? viaje = null)
         {
-            var clientes = await _context.Clientes.ToListAsync();
-            var unidades = await _context.UnidadesTransporte.ToListAsync();
-            var motoristas = await _context.Motoristas.ToListAsync();
+            // Clientes activos (o el cliente actual si estamos editando)
+            var clientes = await _context.Clientes
+                .Where(c => (c.Estado != null && c.Estado.ToLower() == "activo") || 
+                            (viaje != null && c.Id == viaje.ClienteId))
+                .OrderBy(c => c.Nombre)
+                .ToListAsync();
+
+            // Unidades activas (o la unidad actual si estamos editando)
+            var unidades = await _context.UnidadesTransporte
+                .Where(u => (u.Estado != null && u.Estado.ToLower() == "activo") || 
+                            (viaje != null && u.Id == viaje.UnidadId))
+                .OrderBy(u => u.Placa)
+                .ToListAsync();
+
+            // Motoristas activos (o el motorista actual si estamos editando)
+            var motoristas = await _context.Motoristas
+                .Where(m => (m.Estado != null && m.Estado.ToLower() == "activo") || 
+                            (viaje != null && m.Id == viaje.MotoristaId))
+                .OrderBy(m => m.Nombre)
+                .ToListAsync();
 
             ViewData["ClienteId"] = new SelectList(clientes, "Id", "Nombre", viaje?.ClienteId);
             ViewData["UnidadId"] = new SelectList(unidades, "Id", "Placa", viaje?.UnidadId);
