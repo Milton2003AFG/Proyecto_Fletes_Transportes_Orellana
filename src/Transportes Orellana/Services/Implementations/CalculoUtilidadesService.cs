@@ -23,7 +23,7 @@ public class CalculoUtilidadesService : ICalculoUtilidadesService
             .Include(f => f.Motorista)
             .Include(f => f.Unidad)
             .Include(f => f.Gastos)
-            .Where(f => f.Estado == "terminado")
+            .Where(f => f.Estado == "terminado" || f.Estado == "con_queja")
             .OrderByDescending(f => f.FechaRegistro)
             .ToListAsync();
 
@@ -42,8 +42,7 @@ public class CalculoUtilidadesService : ICalculoUtilidadesService
             .Include(f => f.Gastos)
             .FirstOrDefaultAsync(f =>
                 f.Id == fleteId &&
-                f.Estado == "terminado" ||
-                f.Estado == "con_queja");
+                (f.Estado == "terminado" || f.Estado == "con_queja"));
 
         if (flete == null)
         {

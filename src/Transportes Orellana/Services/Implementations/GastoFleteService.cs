@@ -18,9 +18,11 @@ public class GastoFleteService : IGastoFleteService
 
     public async Task<IEnumerable<ResumenGastosFlete>> ListarResumenGastosPorFleteAsync()
     {
+        var estadosValidos = new[] { "terminado", "con_queja" };
+
         return await _context.Fletes
             .AsNoTracking()
-            .Where(f => f.Estado == "terminado")
+            .Where(f => f.Estado != null && estadosValidos.Contains(f.Estado.ToLower()))
             .Select(f => new ResumenGastosFlete
             {
                 FleteId = f.Id,
@@ -96,18 +98,20 @@ public class GastoFleteService : IGastoFleteService
         var flete = await _context.Fletes
             .AsNoTracking()
             .Where(f => f.Id == fleteId)
-            .Select(f => new
-            { f.Id, f.Estado})
+            .Select(f => new { f.Id, f.Estado })
             .FirstOrDefaultAsync();
 
-        if(flete == null)
+        if (flete == null)
         {
             return (false, "El flete no existe", null);
         }
 
-        if (!string.Equals(flete.Estado, "terminado", StringComparison.OrdinalIgnoreCase))
+        bool esEstadoValido = string.Equals(flete.Estado, "terminado", StringComparison.OrdinalIgnoreCase) ||
+                            string.Equals(flete.Estado, "con_queja", StringComparison.OrdinalIgnoreCase);
+
+        if (!esEstadoValido)
         {
-            return (false, "Solo se pueden gestionar gastos de fletes terminados.", null);
+            return (false, "Solo se pueden gestionar gastos de fletes terminados o con queja.", null);
         }
 
         var gasto = await _context.GastosFletes
@@ -120,11 +124,10 @@ public class GastoFleteService : IGastoFleteService
                 TipoGasto = g.TipoGasto,
                 Monto = g.Monto,
                 FechaRegistro = g.FechaRegistro
-
             })
             .ToListAsync();
 
-        return(true, null, gasto);
+        return (true, null, gasto);
     }   
 
     public async Task<(bool Exito, string? Error)> ActualizarAsync(GastoFlete gasto)
@@ -185,21 +188,24 @@ public class GastoFleteService : IGastoFleteService
                 })
                 .FirstOrDefaultAsync();
 
-            if(gastoInfo == null)
+            if (gastoInfo == null)
             {
                 return (false, "El gasto específico no existe");
             }
 
-            if (!string.Equals(gastoInfo.EstadoFlete, "terminado", StringComparison.OrdinalIgnoreCase))
+            bool esEstadoValido = string.Equals(gastoInfo.EstadoFlete, "terminado", StringComparison.OrdinalIgnoreCase) ||
+                                string.Equals(gastoInfo.EstadoFlete, "con_queja", StringComparison.OrdinalIgnoreCase);
+
+            if (!esEstadoValido)
             {
-                return (false, "Solo se pueden eliminar gastos de fletes que estén terminados.");
+                return (false, "Solo se pueden eliminar gastos de fletes que estén terminados o con queja.");
             }
 
             await _context.GastosFletes
                 .Where(g => g.Id == id)
                 .ExecuteDeleteAsync();
 
-            return(true, null);
+            return (true, null);
         }
         catch (DbException ex)
         {
