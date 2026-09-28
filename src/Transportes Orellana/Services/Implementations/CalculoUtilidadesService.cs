@@ -42,7 +42,8 @@ public class CalculoUtilidadesService : ICalculoUtilidadesService
             .Include(f => f.Gastos)
             .FirstOrDefaultAsync(f =>
                 f.Id == fleteId &&
-                f.Estado == "terminado");
+                f.Estado == "terminado" ||
+                f.Estado == "con_queja");
 
         if (flete == null)
         {
