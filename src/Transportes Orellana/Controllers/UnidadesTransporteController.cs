@@ -19,10 +19,10 @@ public class UnidadesTransporteController : Controller
 
     // GET: UnidadesTransporte
     // Admin y Motorista
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(bool soloDisponibles = false)
     {
-        var unidades =
-            await _unidadTransporteService.ObtenerTodosAsync();
+        ViewBag.SoloDisponibles = soloDisponibles;
+        var unidades = await _unidadTransporteService.ObtenerTodosAsync(soloDisponibles);
 
         return View(unidades);
     }

@@ -14,11 +14,17 @@ namespace Transportes_Orellana.Services.Implementations
             _context = context;
         }
 
-        public async Task<IEnumerable<UnidadTransporte>> ObtenerTodosAsync()
+        public async Task<IEnumerable<UnidadTransporte>> ObtenerTodosAsync(bool soloDisponibles = false)
         {
-            return await _context.UnidadesTransporte
-                .OrderByDescending(u => u.FechaRegistro)
-                .ToListAsync();
+            var query = _context.UnidadesTransporte.AsQueryable();
+            if (soloDisponibles)
+            {
+                var estadosOcupados = new[] {"en_proceso", "programado", "con_devolucion"};
+                query = query.Where(u => u.Estado == "activo" &&
+                    !_context.Fletes.Any(f => f.UnidadId == u.Id && estadosOcupados.Contains(f.Estado)));
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<UnidadTransporte?> ObtenerPorIdAsync(int id)

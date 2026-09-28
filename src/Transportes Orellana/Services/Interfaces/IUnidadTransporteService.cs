@@ -4,7 +4,7 @@ namespace Transportes_Orellana.Services.Interfaces
 {
     public interface IUnidadTransporteService
     {
-        Task<IEnumerable<UnidadTransporte>> ObtenerTodosAsync();
+        Task<IEnumerable<UnidadTransporte>> ObtenerTodosAsync(bool soloDisponibles);
 
         Task<UnidadTransporte?> ObtenerPorIdAsync(int id);
 

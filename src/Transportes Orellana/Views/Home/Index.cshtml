@@ -81,7 +81,7 @@
                         <h3 class="fw-bold mb-0 text-dark">@Model.CamionesDisponibles</h3>
                     </div>
                 </div>
-                <a asp-controller="UnidadesTransporte" asp-action="Index" class="btn btn-sm btn-outline-secondary rounded-pill">Ver unidades</a>
+                <a asp-controller="UnidadesTransporte" asp-action="Index" asp-route-soloDisponibles="true" class="btn btn-sm btn-outline-secondary rounded-pill">Ver unidades</a>
             </div>
         </div>
 
