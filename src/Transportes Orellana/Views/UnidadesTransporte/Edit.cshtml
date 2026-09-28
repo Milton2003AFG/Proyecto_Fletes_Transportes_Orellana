@@ -1,0 +1,116 @@
+﻿@model UnidadTransporte
+
+@{
+    ViewData["Title"] = "Editar Unidad de Transporte";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+
+        <!-- Encabezado -->
+        <div class="mb-4">
+            <h3 class="fw-bold text-dark mb-1">Editar Unidad de Transporte</h3>
+            <p class="text-muted mb-0">
+                Modifique la información de la unidad de transporte.
+            </p>
+        </div>
+
+        <form asp-action="Edit" method="post">
+
+            <input type="hidden" asp-for="Id" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3"></div>
+
+            <div class="row g-3">
+
+                <!-- Placa -->
+                <div class="col-md-6">
+                    <label asp-for="Placa" class="form-label fw-semibold">
+                        Placa
+                    </label>
+
+                    <input asp-for="Placa"
+                           class="form-control"
+                           maxlength="8" />
+
+                    <span asp-validation-for="Placa"
+                          class="text-danger small"></span>
+                </div>
+
+                <!-- Marca -->
+                <div class="col-md-6">
+                    <label asp-for="Marca" class="form-label fw-semibold">
+                        Marca
+                    </label>
+
+                    <input asp-for="Marca"
+                           class="form-control"
+                           maxlength="25" />
+
+                    <span asp-validation-for="Marca"
+                          class="text-danger small"></span>
+                </div>
+
+                <!-- Capacidad -->
+                <div class="col-md-6">
+                    <label asp-for="CapacidadToneladas"
+                           class="form-label fw-semibold">
+                        Capacidad (toneladas)
+                    </label>
+
+                    <input asp-for="CapacidadToneladas"
+                           class="form-control"
+                           type="number"
+                           step="0.01"
+                           min="0.01" />
+
+                    <span asp-validation-for="CapacidadToneladas"
+                          class="text-danger small"></span>
+                </div>
+
+                <!-- Año -->
+                <div class="col-md-6">
+                    <label asp-for="AnioFabricacion"
+                           class="form-label fw-semibold">
+                        Año de fabricación
+                    </label>
+
+                    <input asp-for="AnioFabricacion"
+                           class="form-control"
+                           type="number"
+                           min="1900"
+                           max="@DateTime.Now.Year" />
+
+                    <span asp-validation-for="AnioFabricacion"
+                          class="text-danger small"></span>
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-flex justify-content-end gap-2 mt-4">
+
+                <a asp-action="Index"
+                   class="btn btn-light border px-4">
+                    <i class="bi bi-arrow-left me-1"></i>
+                    Cancelar
+                </a>
+
+                <button type="submit"
+                        class="btn btn-primary px-4 shadow-sm">
+                    <i class="bi bi-check-lg me-1"></i>
+                    Guardar cambios
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
