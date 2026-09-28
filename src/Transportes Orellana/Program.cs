@@ -47,11 +47,26 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Crear roles y admin por defecto al arrancar
+// Migraciones y seeding automático para nube o local
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    await SeedSecurityDataAsync(services);
+    var logger = services.GetRequiredService<ILogger<Program>>();
+
+    try
+    {
+        // Aplicar las migraciones de EF Core
+        var context = services.GetRequiredService<AppDbContext>();
+        await context.Database.MigrateAsync();
+
+        // Inicializar roles y el primer administrador
+        await SeedSecurityDataAsync(services, builder.Configuration);
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Ocurrió un error al ejecutar las migraciones o el Seeding en la base de datos.");
+        // Si falla la DB al arrancar, registrar en logs
+    }
 }
 
 // Configure the HTTP request pipeline.
@@ -74,12 +89,13 @@ app.MapControllerRoute(
 
 app.Run();
 
-// Método para sembrar Roles y usuario inicial
-async Task SeedSecurityDataAsync(IServiceProvider serviceProvider)
+// Método de seeding
+async Task SeedSecurityDataAsync(IServiceProvider serviceProvider, IConfiguration configuration)
 {
     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
+    // Roles del sistema
     string[] roles = { "Admin", "Motorista" };
     foreach (var rol in roles)
     {
@@ -89,29 +105,24 @@ async Task SeedSecurityDataAsync(IServiceProvider serviceProvider)
         }
     }
 
-    // Crear Admin por defecto si no existe
-    string adminEmail = "admin@transportesorellana.com";
+    // Obtener credenciales del primer Admin desde Variables de Entorno o appsettings
+    string adminEmail = configuration["AdminSeed:Email"] ?? "admin@transportesorellana.com";
+    string adminPassword = configuration["AdminSeed:Password"] ?? "Admin!Transportes#Orellana_2026";
+
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
     if (adminUser == null)
     {
-        var admin = new IdentityUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
-        var resultado = await userManager.CreateAsync(admin, "Admin!Transportes#Orellana_2026");
+        var admin = new IdentityUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            EmailConfirmed = true
+        };
+
+        var resultado = await userManager.CreateAsync(admin, adminPassword);
         if (resultado.Succeeded)
         {
             await userManager.AddToRoleAsync(admin, "Admin");
-        }
-    }
-
-    // Motorista de prueba
-    string motoristaEmail = "motorista@transportesorellana.com";
-    var motoristaUser = await userManager.FindByEmailAsync(motoristaEmail);
-    if (motoristaUser == null)
-    {
-        var motorista = new IdentityUser { UserName = motoristaEmail, Email = motoristaEmail, EmailConfirmed = true };
-        var resultado = await userManager.CreateAsync(motorista, "Motorista123*");
-        if (resultado.Succeeded)
-        {
-            await userManager.AddToRoleAsync(motorista, "Motorista");
         }
     }
 }
