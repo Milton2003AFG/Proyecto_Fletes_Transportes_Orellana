@@ -6,7 +6,7 @@ using Transportes_Orellana.Services.Interfaces;
 
 namespace Transportes_Orellana.Controllers;
 
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin,Motorista")]
 public class MotoristasController : Controller
 {
     private readonly IMotoristaService _motoristaService;
@@ -15,7 +15,7 @@ public class MotoristasController : Controller
     {
         _motoristaService = motoristaService;
     }
-
+    
     public async Task<IActionResult> Index()
         => View(await _motoristaService.ObtenerTodosAsync());
 
@@ -28,10 +28,12 @@ public class MotoristasController : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public IActionResult Create() => View(new RegistrarMotoristaViewModel());
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create(RegistrarMotoristaViewModel model)
     {
         if (!ModelState.IsValid) return View(model);
@@ -49,6 +51,7 @@ public class MotoristasController : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null) return NotFound();
@@ -59,6 +62,7 @@ public class MotoristasController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(int id, Motorista motorista)
     {
         if (id != motorista.Id) return NotFound();
@@ -80,6 +84,7 @@ public class MotoristasController : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null) return NotFound();
@@ -90,6 +95,7 @@ public class MotoristasController : Controller
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         if (!await _motoristaService.CambiarEstadoAsync(id, "inactivo"))
@@ -100,6 +106,7 @@ public class MotoristasController : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Activate(int? id)
     {
         if (id == null) return NotFound();
@@ -110,6 +117,7 @@ public class MotoristasController : Controller
 
     [HttpPost, ActionName("Activate")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> ActivateConfirmed(int id)
     {
         if (!await _motoristaService.CambiarEstadoAsync(id, "activo"))

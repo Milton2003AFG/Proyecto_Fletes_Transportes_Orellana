@@ -36,7 +36,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Camiones" ? "active" : "")" asp-controller="UnidadesTransporte" asp-action="Index">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "UnidadesTransporte" ? "active" : "")" asp-controller="UnidadesTransporte" asp-action="Index">
                         <i class="bi bi-truck-front"></i> Camiones
                     </a>
                 </li>
@@ -46,7 +46,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Gastos" ? "active" : "")" asp-controller="GastosFlete" asp-action="Index">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "GastosFlete" ? "active" : "")" asp-controller="GastosFlete" asp-action="Index">
                         <i class="bi bi-wallet2"></i> Gastos
                     </a>
                 </li>

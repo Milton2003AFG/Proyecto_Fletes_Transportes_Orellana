@@ -22,7 +22,6 @@ public class GastosFleteController : Controller
         return View(resumenGastosPorFlete);
     } 
 
-    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Details(int? id)
     {
         if(id == null) return NotFound();

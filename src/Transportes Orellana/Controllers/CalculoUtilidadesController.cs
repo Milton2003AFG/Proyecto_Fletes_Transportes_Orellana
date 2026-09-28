@@ -4,7 +4,7 @@ using Transportes_Orellana.Services.Interfaces;
 
 namespace Transportes_Orellana.Controllers;
 
-[Authorize(Roles = "Admin,Motorista")]
+[Authorize(Roles = "Admin")]
 public class CalculoUtilidadesController : Controller
 {
     private readonly ICalculoUtilidadesService _calculoUtilidadesService;
