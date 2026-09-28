@@ -39,6 +39,7 @@ builder.Services.AddScoped<IReporteUtilidadesPdfService, ReporteUtilidadesPdfSer
 builder.Services.AddScoped<IGastoFleteService, GastoFleteService>();
 builder.Services.AddScoped<IUsuarioService, UserService>();
 builder.Services.AddScoped<IMotoristaService, MotoristaService>();
+builder.Services.AddScoped<IUnidadTransporteService, UnidadTransporteService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 // Add services to the container.
