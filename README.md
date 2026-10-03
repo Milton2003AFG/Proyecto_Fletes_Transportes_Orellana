@@ -12,7 +12,6 @@ Proyecto de software empresarial desarrollado para la materia de **Desarrollo de
 | **FG212499** | Milton Antonio Flores Gómez
 | **ML210413** | José Daniel Menjivar Lemus
 | **MH220744** | Rodrigo José Miranda Hurtado
-| **ML222713** | Manuel Augusto Miranda Larin
 ---
 
 ## Descripción del Proyecto
@@ -33,8 +32,9 @@ Este proyecto consiste en el análisis, diseño e implementación de una **aplic
 
 * **Backend:** ASP.NET Core MVC (C#) con arquitectura desacoplada en controladores dedicados.
 * **Persistencia y ORM:** Entity Framework Core.
-* **Base de Datos & Cloud BaaS:** Supabase (PostgreSQL) para persistencia relacional y almacenamiento de archivos (PDFs y CVs).
+* **Base de Datos & Cloud BaaS:** Neon (PostgreSQL) para persistencia relacional y Render para alojamiento web.
 * **Frontend:** Razor Views y Bootstrap.
 * **Seguridad:** ASP.NET Core Identity y cifrado de conexiones mediante SSL/HTTPS.
 * **Control de Versiones y Metodología:** Git/GitHub bajo marco de trabajo **Scrum** con prototipado evolutivo.
+* **Aplicación Desplegada:** [Transportes Orellana](https://transportes-orellana.onrender.com/)
 
